@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Futuro Financiero de Unai &middot; MSCI World (IWDA)</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0f1a;--bg2:#0f1623;--bg3:#141c2e;--surface:#1a2236;--surface2:#212d42;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);--text:#e8edf5;--text2:#8a99b3;--text3:#5a6a84;--accent:#4e8ef7;--accent2:#3dd68c;--accent3:#f5a623;--accent4:#ef4444;--gold:#d4a843;--font-display:'Lora',Georgia,serif;--font-body:'DM Sans',system-ui,sans-serif;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:15px;line-height:1.6;min-height:100vh;}
+nav{position:sticky;top:0;z-index:100;background:rgba(10,15,26,0.93);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:.75rem 0;}
+.nav-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;}
+.nav-brand{font-family:var(--font-display);font-size:14px;color:var(--text);font-weight:600;}
+.nav-brand span{color:var(--accent);}
+.nav-links{display:flex;gap:1.25rem;flex-wrap:wrap;}
+.nav-links a{font-size:12px;color:var(--text3);text-decoration:none;transition:color .2s;white-space:nowrap;}
+.nav-links a:hover{color:var(--text);}
+.hero{position:relative;overflow:hidden;padding:5rem 0 4rem;text-align:center;border-bottom:1px solid var(--border);}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(78,142,247,.12) 0%,transparent 70%);pointer-events:none;}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(78,142,247,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(78,142,247,.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;}
+.hero-eyebrow{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(78,142,247,.3);padding:5px 14px;border-radius:100px;margin-bottom:1.5rem;position:relative;}
+.hero h1{font-family:var(--font-display);font-size:clamp(2rem,5vw,3.5rem);font-weight:600;color:var(--text);line-height:1.15;margin-bottom:1rem;position:relative;}
+.hero h1 em{color:var(--accent);font-style:italic;}
+.hero-sub{font-size:16px;color:var(--text2);max-width:520px;margin:0 auto 2rem;position:relative;}
+.hero-stats{display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;position:relative;}
+.hero-stat-val{font-family:var(--font-display);font-size:1.9rem;font-weight:600;color:var(--accent2);display:block;}
+.hero-stat-label{font-size:11px;color:var(--text3);letter-spacing:.05em;}
+.container{max-width:980px;margin:0 auto;padding:0 1.25rem;}
+.section{padding:3.5rem 0;border-bottom:1px solid var(--border);}
+.section:last-child{border-bottom:none;}
+.section-label{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem;}
+.section-title{font-family:var(--font-display);font-size:1.55rem;font-weight:600;color:var(--text);line-height:1.3;margin-bottom:.5rem;}
+.section-desc{font-size:14px;color:var(--text2);line-height:1.75;margin-bottom:2rem;}
+.scenario-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:1.5rem;}
+.sc-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem 1.2rem;cursor:pointer;text-align:left;transition:border-color .2s,background .2s;font-family:var(--font-body);}
+.sc-btn:hover{border-color:var(--border2);background:var(--surface2);}
+.sc-btn.active.cons{border-color:var(--accent3);background:rgba(245,166,35,.07);}
+.sc-btn.active.base{border-color:var(--accent);background:rgba(78,142,247,.07);}
+.sc-btn.active.opt{border-color:var(--accent2);background:rgba(61,214,140,.07);}
+.sc-name{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:4px;}
+.sc-rate{font-size:21px;font-weight:600;}
+.sc-rate.cons{color:var(--accent3);}.sc-rate.base{color:var(--accent);}.sc-rate.opt{color:var(--accent2);}
+.sc-desc{font-size:12px;color:var(--text3);margin-top:3px;}
+.metric-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:1.5rem;}
+.metric-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem 1.2rem;}
+.metric-label{font-size:11px;color:var(--text3);letter-spacing:.04em;margin-bottom:5px;}
+.metric-val{font-size:1.35rem;font-weight:600;font-family:var(--font-display);color:var(--text);}
+.metric-sub{font-size:11px;color:var(--text3);margin-top:2px;}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+table{width:100%;border-collapse:collapse;font-size:13.5px;}
+thead th{padding:10px 12px;text-align:left;font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border2);white-space:nowrap;}
+tbody td{padding:12px;border-bottom:1px solid var(--border);color:var(--text2);white-space:nowrap;}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:hover td{background:rgba(255,255,255,.02);}
+.td-age{font-weight:600;color:var(--text);}
+.td-cap{font-weight:600;}
+.td-cap.cons{color:var(--accent3);}.td-cap.base{color:var(--accent);}.td-cap.opt{color:var(--accent2);}
+.td-real{font-size:12px;color:var(--text3);}
+.badge{display:inline-block;font-size:11px;font-weight:600;padding:3px 9px;border-radius:100px;}
+.badge.cons{background:rgba(245,166,35,.15);color:var(--accent3);}
+.badge.base{background:rgba(78,142,247,.15);color:var(--accent);}
+.badge.opt{background:rgba(61,214,140,.15);color:var(--accent2);}
+.toggle-row{display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;font-size:13px;color:var(--text2);}
+.toggle{position:relative;display:inline-block;width:38px;height:21px;}
+.toggle input{opacity:0;width:0;height:0;}
+.toggle-slider{position:absolute;inset:0;background:var(--surface2);border-radius:21px;transition:.3s;cursor:pointer;}
+.toggle-slider::before{content:'';position:absolute;width:15px;height:15px;left:3px;bottom:3px;background:var(--text3);border-radius:50%;transition:.3s;}
+.toggle input:checked + .toggle-slider{background:var(--accent);}
+.toggle input:checked + .toggle-slider::before{transform:translateX(17px);background:#fff;}
+.callout{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:1.2rem 1.5rem;margin-top:1.5rem;font-size:14px;color:var(--text2);line-height:1.75;}
+.callout strong{color:var(--text);font-weight:600;}
+.callout.green{border-left-color:var(--accent2);}
+.callout.gold{border-left-color:var(--gold);}
+.compare-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(195px,1fr));gap:11px;margin-bottom:1.5rem;}
+.cmp-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.2rem;}
+.cmp-card.best{border-color:rgba(61,214,140,.4);background:rgba(61,214,140,.05);}
+.cmp-card.worst{opacity:.72;}
+.cmp-best-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);margin-bottom:6px;}
+.cmp-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:10px;}
+.cmp-capital{font-family:var(--font-display);font-size:1.35rem;font-weight:600;margin-bottom:7px;}
+.cmp-row{display:flex;justify-content:space-between;font-size:12px;margin-top:5px;}
+.cmp-row-label{color:var(--text3);}
+.cmp-row-val{color:var(--text2);font-weight:500;}
+.cmp-row-val.loss{color:var(--accent4);}
+.cmp-row-val.green{color:var(--accent2);}
+.delay-item{margin-bottom:1.2rem;}
+.delay-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;}
+.delay-name{font-size:13px;font-weight:500;color:var(--text);}
+.delay-capital{font-size:13px;font-weight:600;}
+.bar-track{height:8px;background:var(--surface2);border-radius:100px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:100px;transition:width 1.1s cubic-bezier(.4,0,.2,1);}
+.delay-sub{display:flex;justify-content:space-between;margin-top:4px;font-size:11px;color:var(--text3);}
+.chart-wrap{position:relative;width:100%;}
+.legend-row{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:.75rem;font-size:12px;color:var(--text2);}
+.legend-item{display:flex;align-items:center;gap:6px;}
+.legend-swatch{width:22px;height:3px;border-radius:2px;flex-shrink:0;}
+.parallel-table-wrap{overflow-x:auto;}
+.parallel-table{width:100%;border-collapse:collapse;font-size:13px;}
+.parallel-table th{padding:10px 12px;font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border2);text-align:right;white-space:nowrap;}
+.parallel-table th:first-child{text-align:left;}
+.parallel-table td{padding:11px 12px;border-bottom:1px solid var(--border);text-align:right;white-space:nowrap;color:var(--text2);}
+.parallel-table td:first-child{text-align:left;font-weight:600;color:var(--text);}
+.parallel-table tr:last-child td{border-bottom:none;}
+.parallel-table tr:hover td{background:rgba(255,255,255,.02);}
+.col-cons{color:var(--accent3)!important;font-weight:600;}
+.col-base{color:var(--accent)!important;font-weight:600;}
+.col-opt{color:var(--accent2)!important;font-weight:600;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start;}
+.control-group{margin-bottom:1.25rem;}
+.control-label{font-size:13px;color:var(--text2);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;}
+.control-label .ctl-val{color:var(--accent);font-weight:600;font-size:14px;}
+input[type="range"]{-webkit-appearance:none;width:100%;height:4px;background:var(--surface2);border-radius:2px;outline:none;cursor:pointer;}
+input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:17px;height:17px;background:var(--accent);border-radius:50%;cursor:pointer;border:2px solid var(--bg);}
+input[type="range"]::-moz-range-thumb{width:17px;height:17px;background:var(--accent);border-radius:50%;cursor:pointer;border:2px solid var(--bg);}
+.withdrawal-result{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.5rem;margin-top:1rem;}
+.wr-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:1rem;}
+.wr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;}
+.wr-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.9rem 1rem;}
+.wr-label{font-size:11px;color:var(--text3);margin-bottom:4px;}
+.wr-val{font-size:1.05rem;font-weight:600;color:var(--text);}
+.wr-val.green{color:var(--accent2);}
+.wr-val.red{color:var(--accent4);}
+.share-row{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;background:rgba(61,214,140,.07);border:1px solid rgba(61,214,140,.2);border-radius:8px;padding:.7rem 1rem;margin-top:.75rem;}
+.share-url-txt{font-size:12px;color:var(--text2);font-family:monospace;flex:1;min-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.btn-copy{background:var(--accent2);color:#0a0f1a;border:none;border-radius:5px;padding:4px 12px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font-body);}
+.source-list{list-style:none;}
+.source-item{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem 1.2rem;margin-bottom:9px;display:grid;grid-template-columns:auto 1fr;gap:1rem;align-items:start;}
+.source-num{font-size:11px;font-weight:700;color:var(--accent);background:rgba(78,142,247,.1);width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+.source-title{font-size:14px;font-weight:500;color:var(--text);margin-bottom:2px;}
+.source-org{font-size:12px;color:var(--accent2);margin-bottom:4px;font-weight:500;}
+.source-desc{font-size:12px;color:var(--text3);line-height:1.65;}
+.source-link{font-size:12px;color:var(--accent);text-decoration:none;display:inline-block;margin-top:4px;}
+.source-link:hover{text-decoration:underline;}
+.how-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-top:1.5rem;}
+.how-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.2rem;}
+.how-icon{font-size:1.4rem;margin-bottom:.7rem;}
+.how-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:5px;}
+.how-desc{font-size:12px;color:var(--text3);line-height:1.65;}
+.formula-box{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:1rem 1.5rem;font-family:'Courier New',monospace;font-size:13px;color:var(--accent2);margin:1rem 0;line-height:1.9;}
+.disclaimer{background:rgba(245,166,35,.06);border:1px solid rgba(245,166,35,.2);border-radius:8px;padding:1rem 1.2rem;font-size:12px;color:var(--text3);line-height:1.75;margin-top:2rem;}
+.disclaimer strong{color:var(--accent3);}
+.footer{background:var(--bg2);border-top:1px solid var(--border);padding:2rem 0;text-align:center;font-size:12px;color:var(--text3);line-height:1.9;}
+.fade-in{opacity:0;transform:translateY(18px);transition:opacity .65s ease,transform .65s ease;}
+.fade-in.visible{opacity:1;transform:translateY(0);}
+@media(max-width:680px){.scenario-row,.two-col,.compare-grid{grid-template-columns:1fr;}.nav-links{display:none;}.hero h1{font-size:2rem;}.metric-row{grid-template-columns:1fr 1fr;}.parallel-table{font-size:12px;}.parallel-table th,.parallel-table td{padding:8px;}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <div class="nav-inner">
+      <div class="nav-brand">Unai &middot; <span>MSCI World</span></div>
+      <div class="nav-links">
+        <a href="#proyecciones">Proyecciones</a>
+        <a href="#paralela">3 Escenarios</a>
+        <a href="#comparativa">Costo de esperar</a>
+        <a href="#calculadora">Calculadora</a>
+        <a href="#retirada">Retirada</a>
+        <a href="#metodologia">Metodolog&iacute;a</a>
+        <a href="#fuentes">Fuentes</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="container">
+    <div class="hero-eyebrow">Reporte de inversi&oacute;n &middot; Inter&eacute;s compuesto</div>
+    <h1>El futuro financiero<br>de <em>Unai</em></h1>
+    <p class="hero-sub">100 &euro; al mes en el ETF MSCI World (IWDA) desde los 2 a&ntilde;os.<br>Una lecci&oacute;n sobre el poder del tiempo y el inter&eacute;s compuesto.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><span class="hero-stat-val">100 &euro;</span><span class="hero-stat-label">aportaci&oacute;n mensual</span></div>
+      <div class="hero-stat"><span class="hero-stat-val">63 a&ntilde;os</span><span class="hero-stat-label">horizonte de inversi&oacute;n</span></div>
+      <div class="hero-stat"><span class="hero-stat-val">~9% / a&ntilde;o</span><span class="hero-stat-label">rentabilidad hist&oacute;rica MSCI World</span></div>
+      <div class="hero-stat"><span class="hero-stat-val">&times;18</span><span class="hero-stat-label">multiplicador esperado a los 65</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROYECCIONES -->
+<div class="section fade-in" id="proyecciones">
+  <div class="container">
+    <div class="section-label">01 &middot; Proyecciones</div>
+    <div class="section-title">Capital acumulado por edades</div>
+    <div class="section-desc">Elige un escenario de rentabilidad anual. El capital se calcula con capitalizaci&oacute;n mensual compuesta. Activa el ajuste por inflaci&oacute;n (2,5% anual) para ver el poder adquisitivo real de cada cifra.</div>
+    <div class="scenario-row">
+      <button class="sc-btn cons" id="sc-cons" onclick="setScenario('cons')"><div class="sc-name">Conservador</div><div class="sc-rate cons">6% anual</div><div class="sc-desc">Crisis frecuentes, d&eacute;cadas planas</div></button>
+      <button class="sc-btn base active" id="sc-base" onclick="setScenario('base')"><div class="sc-name">Esperado &#10022;</div><div class="sc-rate base">9% anual</div><div class="sc-desc">Media hist&oacute;rica MSCI World 1970&ndash;2024</div></button>
+      <button class="sc-btn opt" id="sc-opt" onclick="setScenario('opt')"><div class="sc-name">Optimista</div><div class="sc-rate opt">12% anual</div><div class="sc-desc">D&eacute;cadas con fuerte crecimiento</div></button>
+    </div>
+    <div class="toggle-row">
+      <label class="toggle"><input type="checkbox" id="toggle-inflation" onchange="renderTable()"><span class="toggle-slider"></span></label>
+      <span>Mostrar valor real ajustado por inflaci&oacute;n (2,5% anual)</span>
+    </div>
+    <div id="proj-metrics" class="metric-row"></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Edad</th><th>A&ntilde;o</th><th>A&ntilde;os inv.</th><th>Total aportado</th><th>Capital nominal</th><th id="th-real" style="display:none">Capital real (2,5% inflac.)</th><th>Ganancia</th><th>Multiplicador</th><th>% es mercado</th></tr></thead>
+        <tbody id="proj-tbody"></tbody>
+      </table>
+    </div>
+    <div class="callout" id="proj-callout"><p></p></div>
+  </div>
+</div>
+
+<!-- TABLA PARALELA -->
+<div class="section fade-in" id="paralela">
+  <div class="container">
+    <div class="section-label">02 &middot; Comparativa de escenarios</div>
+    <div class="section-title">Los tres escenarios en paralelo</div>
+    <div class="section-desc">Sin necesidad de cambiar de opci&oacute;n: los tres escenarios de rentabilidad enfrentados por edad, para ver de un vistazo el rango de resultados posibles.</div>
+    <div class="parallel-table-wrap">
+      <table class="parallel-table">
+        <thead><tr><th style="text-align:left">Edad / A&ntilde;o</th><th>Aportado</th><th style="color:var(--accent3)">Conservador 6%</th><th style="color:var(--accent)">Esperado 9%</th><th style="color:var(--accent2)">Optimista 12%</th><th>Mult. esperado</th></tr></thead>
+        <tbody id="parallel-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- COMPARATIVA -->
+<div class="section fade-in" id="comparativa">
+  <div class="container">
+    <div class="section-label">03 &middot; El coste de esperar</div>
+    <div class="section-title">&iquest;Qu&eacute; pasa si Iv&aacute;n espera para empezar?</div>
+    <div class="section-desc">Todos los escenarios mantienen 100 &euro;/mes hasta los 65 a&ntilde;os con rentabilidad del 9% anual. La &uacute;nica diferencia es el tiempo. Las barras se animan al llegar a esta secci&oacute;n.</div>
+    <div class="compare-grid" id="compare-cards"></div>
+    <div class="section-label" style="margin-bottom:1rem;margin-top:.5rem;">Capital a los 65 &middot; comparaci&oacute;n visual</div>
+    <div id="delay-bars"></div>
+    <div class="chart-wrap" style="height:230px;margin-top:1.5rem;"><canvas id="compareChart"></canvas></div>
+    <div class="callout green" style="margin-top:1.5rem;"><strong>Conclusi&oacute;n clave:</strong> Empezar a los 2 a&ntilde;os en lugar de a los 18 supone <strong id="diff-text">&mdash;</strong> adicionales a los 65. Esa diferencia no viene de aportar m&aacute;s dinero &mdash; viene exclusivamente de darle m&aacute;s tiempo al inter&eacute;s compuesto.</div>
+  </div>
+</div>
+
+<!-- CURVA -->
+<div class="section fade-in">
+  <div class="container">
+    <div class="section-label">04 &middot; Evoluci&oacute;n visual</div>
+    <div class="section-title">La curva del tiempo</div>
+    <div class="section-desc">En los &uacute;ltimos 20 a&ntilde;os de inversi&oacute;n el mercado genera m&aacute;s dinero que en todos los anteriores juntos. El &aacute;rea entre la l&iacute;nea punteada (aportado) y las curvas es el regalo del inter&eacute;s compuesto. Hover sobre el gr&aacute;fico para ver los valores exactos.</div>
+    <div class="legend-row">
+      <div class="legend-item"><div class="legend-swatch" style="background:rgba(245,166,35,.5);"></div><span>Capital aportado (punteado)</span></div>
+      <div class="legend-item"><div class="legend-swatch" style="background:var(--accent3);"></div><span>Conservador 6%</span></div>
+      <div class="legend-item"><div class="legend-swatch" style="background:var(--accent);"></div><span>Esperado 9%</span></div>
+      <div class="legend-item"><div class="legend-swatch" style="background:var(--accent2);"></div><span>Optimista 12%</span></div>
+    </div>
+    <div class="chart-wrap" style="height:360px;"><canvas id="growthChart"></canvas></div>
+  </div>
+</div>
+
+<!-- CALCULADORA -->
+<div class="section fade-in" id="calculadora">
+  <div class="container">
+    <div class="section-label">05 &middot; Calculadora personalizada</div>
+    <div class="section-title">Personaliza los par&aacute;metros</div>
+    <div class="section-desc">Ajusta los valores para explorar cualquier escenario. La calculadora valida los inputs y avisa si los par&aacute;metros no tienen sentido. Usa el bot&oacute;n &ldquo;Compartir&rdquo; para generar una URL con tu configuraci&oacute;n exacta.</div>
+    <div id="calc-error" style="display:none;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);border-radius:8px;padding:.75rem 1rem;font-size:13px;color:var(--accent4);margin-bottom:1rem;"></div>
+    <div class="two-col">
+      <div>
+        <div class="control-group"><div class="control-label">Aportaci&oacute;n mensual <span class="ctl-val" id="lbl-monthly">100 &euro;</span></div><input type="range" id="ctrl-monthly" min="0" max="1000" step="50" value="100" oninput="renderCalc()"></div>
+        <div class="control-group"><div class="control-label">Rentabilidad anual estimada <span class="ctl-val" id="lbl-rate">9%</span></div><input type="range" id="ctrl-rate" min="1" max="15" step="0.5" value="9" oninput="renderCalc()"></div>
+        <div class="control-group"><div class="control-label">Edad de inicio <span class="ctl-val" id="lbl-start">2 a&ntilde;os</span></div><input type="range" id="ctrl-start" min="2" max="40" step="1" value="2" oninput="renderCalc()"></div>
+        <div class="control-group"><div class="control-label">Edad de retirada <span class="ctl-val" id="lbl-end">65 a&ntilde;os</span></div><input type="range" id="ctrl-end" min="18" max="80" step="1" value="65" oninput="renderCalc()"></div>
+        <div class="control-group"><div class="control-label">Inflaci&oacute;n anual <span class="ctl-val" id="lbl-infl">2,5%</span></div><input type="range" id="ctrl-infl" min="0" max="6" step="0.5" value="2.5" oninput="renderCalc()"></div>
+        <button onclick="shareCalc()" style="background:var(--accent);color:#fff;border:none;border-radius:8px;padding:.6rem 1.2rem;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font-body);">&#128279; Compartir esta configuraci&oacute;n</button>
+        <div id="share-banner" style="display:none;" class="share-row"><span style="font-size:12px;color:var(--accent2);">URL copiada:</span><span class="share-url-txt" id="share-url"></span><button class="btn-copy" onclick="copyUrl()">Copiar</button></div>
+      </div>
+      <div>
+        <div class="metric-row" style="grid-template-columns:1fr 1fr;">
+          <div class="metric-card"><div class="metric-label">Total aportado</div><div class="metric-val" id="calc-invested">&mdash;</div><div class="metric-sub">de tu bolsillo</div></div>
+          <div class="metric-card"><div class="metric-label">Capital nominal</div><div class="metric-val" id="calc-final" style="color:var(--accent2);">&mdash;</div><div class="metric-sub">valor futuro bruto</div></div>
+          <div class="metric-card"><div class="metric-label">Capital real</div><div class="metric-val" id="calc-real" style="color:var(--accent);">&mdash;</div><div class="metric-sub">poder adquisitivo hoy</div></div>
+          <div class="metric-card"><div class="metric-label">Multiplicador real</div><div class="metric-val" id="calc-mult" style="color:var(--gold);">&mdash;</div><div class="metric-sub">veces tu inversi&oacute;n</div></div>
+        </div>
+        <div class="chart-wrap" style="height:190px;margin-top:.5rem;"><canvas id="calcChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RETIRADA -->
+<div class="section fade-in" id="retirada">
+  <div class="container">
+    <div class="section-label">06 &middot; Simulaci&oacute;n de retirada</div>
+    <div class="section-title">&iquest;Cu&aacute;nto puede retirar Unai cada mes?</div>
+    <div class="section-desc">Una vez acumulado el capital, Unai puede empezar a retirar una cantidad mensual mientras el resto sigue invertido. Calcula cu&aacute;nto dura el capital, qu&eacute; renta puede obtener indefinidamente, y el total cobrado.</div>
+    <div class="two-col">
+      <div>
+        <div class="control-group">
+          <div class="control-label">Capital inicial (calculadora) <span class="ctl-val" id="lbl-wr-capital">&mdash;</span></div>
+          <p style="font-size:12px;color:var(--text3);margin-top:4px;">Se actualiza autom&aacute;ticamente desde la calculadora anterior.</p>
+        </div>
+        <div class="control-group" style="margin-top:1rem;"><div class="control-label">Retirada mensual deseada <span class="ctl-val" id="lbl-wr-monthly">1.000 &euro;</span></div><input type="range" id="ctrl-wr-monthly" min="100" max="5000" step="100" value="1000" oninput="renderWithdrawal()"></div>
+        <div class="control-group"><div class="control-label">Rentabilidad durante retirada <span class="ctl-val" id="lbl-wr-rate">4%</span></div><input type="range" id="ctrl-wr-rate" min="1" max="10" step="0.5" value="4" oninput="renderWithdrawal()"><p style="font-size:12px;color:var(--text3);margin-top:4px;">En fase de retirada se invierte de forma m&aacute;s conservadora.</p></div>
+      </div>
+      <div>
+        <div class="withdrawal-result">
+          <div class="wr-title">Resultados de la simulaci&oacute;n</div>
+          <div class="wr-grid">
+            <div class="wr-card"><div class="wr-label">Capital inicial</div><div class="wr-val" id="wr-capital">&mdash;</div></div>
+            <div class="wr-card"><div class="wr-label">Renta perpetua m&aacute;x.</div><div class="wr-val green" id="wr-perpetua">&mdash;</div></div>
+            <div class="wr-card"><div class="wr-label">Duraci&oacute;n del capital</div><div class="wr-val" id="wr-duration">&mdash;</div></div>
+            <div class="wr-card"><div class="wr-label">Total retirado</div><div class="wr-val" id="wr-total">&mdash;</div></div>
+          </div>
+          <div id="wr-callout" style="margin-top:1rem;font-size:13px;color:var(--text2);line-height:1.7;"></div>
+        </div>
+        <div class="chart-wrap" style="height:175px;margin-top:1rem;"><canvas id="wrChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- METODOLOGIA -->
+<div class="section fade-in" id="metodologia">
+  <div class="container">
+    <div class="section-label">07 &middot; Metodolog&iacute;a</div>
+    <div class="section-title">&iquest;C&oacute;mo se calculan los n&uacute;meros?</div>
+    <div class="section-desc">Transparencia total sobre f&oacute;rmulas y supuestos. Sin letra peque&ntilde;a.</div>
+    <div class="how-grid">
+      <div class="how-card"><div class="how-icon">&#128208;</div><div class="how-title">F&oacute;rmula de Valor Futuro</div><div class="how-desc">Renta vitalicia con capitalizaci&oacute;n mensual. La tasa anual se divide en 12 periodos. Es la misma que usa cualquier calculadora financiera certificada CFA.</div></div>
+      <div class="how-card"><div class="how-icon">&#128202;</div><div class="how-title">Rentabilidades hist&oacute;ricas</div><div class="how-desc">El MSCI World ha rentado ~10.4% nominal anual desde 1969. Los escenarios del 6%, 9% y 12% cubren percentiles realistas del historial de 50+ a&ntilde;os.</div></div>
+      <div class="how-card"><div class="how-icon">&#128201;</div><div class="how-title">Ajuste por inflaci&oacute;n</div><div class="how-desc">Deflactor: Capital_real = Capital_nominal / (1 + inflaci&oacute;n)^a&ntilde;os. Con inflaci&oacute;n 2,5% anual, el poder adquisitivo real es significativamente menor al nominal.</div></div>
+      <div class="how-card"><div class="how-icon">&#127970;</div><div class="how-title">&iquest;Qu&eacute; es el IWDA?</div><div class="how-desc">iShares Core MSCI World UCITS ETF. TER: 0.20%. Domiciliado en Irlanda. Acumulaci&oacute;n (reinvierte dividendos). ISIN: IE00B4L5Y983. AUM: &gt;70.000M&euro;.</div></div>
+      <div class="how-card"><div class="how-icon">&#9888;&#65039;</div><div class="how-title">Lo que NO incluyen</div><div class="how-desc">Los c&aacute;lculos son nominales salvo que actives la correcci&oacute;n. No incluyen comisi&oacute;n de custodia (~0.10%), TER del ETF (~0.20%), ni impacto fiscal (IRPF al rescate).</div></div>
+      <div class="how-card"><div class="how-icon">&#128260;</div><div class="how-title">Reinversi&oacute;n de dividendos</div><div class="how-desc">Al ser ETF de acumulaci&oacute;n, los dividendos (~2% anual) se reinvierten autom&aacute;ticamente, potenciando el inter&eacute;s compuesto sin acci&oacute;n del inversor.</div></div>
+    </div>
+    <div class="section-label" style="margin-top:2rem;margin-bottom:.75rem;">F&oacute;rmulas utilizadas</div>
+    <div class="formula-box">FV  = PMT &times; [ ((1 + r/12)^(n&times;12) &minus; 1) / (r/12) ]
+FV_real = FV / (1 + inflaci&oacute;n)^n
+Renta_perpetua = Capital &times; (r_retirada / 12)
+Duraci&oacute;n = &minus;ln(1 &minus; Capital &times; r/12 / PMT) / ln(1 + r/12)
+
+PMT = aportaci&oacute;n mensual &middot; r = rentabilidad anual &middot; n = a&ntilde;os</div>
+    <div class="disclaimer"><strong>&#9888;&#65039; Aviso legal:</strong> Este documento es exclusivamente educativo y no constituye asesoramiento financiero personalizado. Las rentabilidades pasadas no garantizan resultados futuros. Invertir en mercados financieros implica riesgo de p&eacute;rdida parcial o total del capital. Consulta con un asesor financiero certificado (MiFID II) antes de invertir. Los c&aacute;lculos no incluyen comisiones de br&oacute;ker, custodia, TER del ETF ni impacto fiscal.</div>
+  </div>
+</div>
+
+<!-- FUENTES -->
+<div class="section fade-in" id="fuentes">
+  <div class="container">
+    <div class="section-label">08 &middot; Fuentes y referencias</div>
+    <div class="section-title">Datos respaldados por instituciones</div>
+    <div class="section-desc">Todas las cifras y supuestos est&aacute;n basados en fuentes primarias verificables.</div>
+    <ul class="source-list">
+      <li class="source-item"><div class="source-num">1</div><div><div class="source-title">MSCI World Index &mdash; Fact Sheet &amp; Historical Performance</div><div class="source-org">MSCI Inc.</div><div class="source-desc">Fuente primaria del &iacute;ndice MSCI World. Datos de rendimiento desde 1969, metodolog&iacute;a, cobertura geogr&aacute;fica y sectorial. Rentabilidad ~10.4% anual nominal desde su creaci&oacute;n.</div><a href="https://www.msci.com/indexes/index/990100" target="_blank" rel="noopener" class="source-link">&#8599; msci.com/indexes/index/990100</a></div></li>
+      <li class="source-item"><div class="source-num">2</div><div><div class="source-title">iShares Core MSCI World UCITS ETF (IWDA) &mdash; Ficha oficial</div><div class="source-org">BlackRock / iShares</div><div class="source-desc">Documentaci&oacute;n oficial: TER 0.20%, domicilio en Irlanda, pol&iacute;tica de acumulaci&oacute;n, ISIN IE00B4L5Y983, AUM &gt;70.000M&euro; (2024).</div><a href="https://www.ishares.com/uk/individual/en/products/251882/" target="_blank" rel="noopener" class="source-link">&#8599; ishares.com &mdash; IWDA product page</a></div></li>
+      <li class="source-item"><div class="source-num">3</div><div><div class="source-title">Stocks, Bonds, Bills, and Inflation (SBBI) Yearbook</div><div class="source-org">Morningstar / Ibbotson Associates</div><div class="source-desc">Publicaci&oacute;n anual de referencia en finanzas acad&eacute;micas. Retornos hist&oacute;ricos desde 1926. Base estad&iacute;stica para los escenarios de rentabilidad de este reporte.</div><a href="https://www.morningstar.com/products/ibbotson-sbbi" target="_blank" rel="noopener" class="source-link">&#8599; morningstar.com/products/ibbotson-sbbi</a></div></li>
+      <li class="source-item"><div class="source-num">4</div><div><div class="source-title">Global Investment Returns Yearbook 2024</div><div class="source-org">UBS / Credit Suisse Research Institute</div><div class="source-desc">Retornos hist&oacute;ricos de activos en 35 pa&iacute;ses desde 1900. La renta variable global ha superado a la renta fija en todos los horizontes superiores a 20 a&ntilde;os.</div><a href="https://www.ubs.com/global/en/investment-bank/in-focus/2024/global-investment-returns-yearbook.html" target="_blank" rel="noopener" class="source-link">&#8599; ubs.com &mdash; Global Investment Returns Yearbook</a></div></li>
+      <li class="source-item"><div class="source-num">5</div><div><div class="source-title">Dimensional Fund Advisors &mdash; Matrix Book: Historical Returns</div><div class="source-org">Dimensional Fund Advisors (DFA)</div><div class="source-desc">Retornos hist&oacute;ricos de renta variable global. DFA fue cofundada con Eugene Fama (Nobel de Econom&iacute;a 2013). Sus datos respaldan las proyecciones de largo plazo.</div><a href="https://www.dimensional.com/us-en/insights" target="_blank" rel="noopener" class="source-link">&#8599; dimensional.com/insights</a></div></li>
+      <li class="source-item"><div class="source-num">6</div><div><div class="source-title">The Little Book of Common Sense Investing</div><div class="source-org">John C. Bogle &mdash; Fundador de Vanguard</div><div class="source-desc">Demuestra matem&aacute;ticamente que los fondos &iacute;ndice de bajo coste superan sistem&aacute;ticamente a la gesti&oacute;n activa en horizontes largos. Fundamento te&oacute;rico de la estrategia IWDA.</div><a href="https://www.wiley.com/en-us/The+Little+Book+of+Common+Sense+Investing-p-9781119404507" target="_blank" rel="noopener" class="source-link">&#8599; The Little Book of Common Sense Investing</a></div></li>
+      <li class="source-item"><div class="source-num">7</div><div><div class="source-title">The Psychology of Money</div><div class="source-org">Morgan Housel &mdash; Collaborative Fund</div><div class="source-desc">Analiza el caso de Warren Buffett: el 97% de su riqueza fue acumulada despu&eacute;s de los 65 a&ntilde;os por haber empezado a invertir a los 10. Cuantifica el impacto del tiempo sobre el inter&eacute;s compuesto.</div><a href="https://www.harriman-house.com/psychologyofmoney" target="_blank" rel="noopener" class="source-link">&#8599; harriman-house.com/psychologyofmoney</a></div></li>
+      <li class="source-item"><div class="source-num">8</div><div><div class="source-title">A Random Walk Down Wall Street</div><div class="source-org">Burton G. Malkiel &mdash; Princeton University</div><div class="source-desc">Obra seminal sobre la hip&oacute;tesis de mercados eficientes. La estrategia &oacute;ptima para inversores a largo plazo es la indexaci&oacute;n pasiva diversificada &mdash; exactamente la estrategia del MSCI World.</div><a href="https://www.amazon.com/Random-Walk-Down-Wall-Street/dp/0393330338" target="_blank" rel="noopener" class="source-link">&#8599; A Random Walk Down Wall Street</a></div></li>
+    </ul>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>Elaborado para <strong>Iv&aacute;n</strong> y su hijo <strong>Unai</strong> &middot; Mayo 2026</p>
+    <p style="margin-top:4px;">Datos: MSCI Inc. &middot; BlackRock iShares &middot; Morningstar &middot; UBS Investment Research &middot; DFA</p>
+    <p style="margin-top:8px;color:#3a4a64;font-style:italic;">&laquo;El inter&eacute;s compuesto es la octava maravilla del mundo. Quien lo entiende lo gana; quien no, lo paga.&raquo;<br>&mdash; Atribuido a Albert Einstein</p>
+  </div>
+</footer>
+
+<script>
+const FMT=new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR',maximumFractionDigits:0});
+const fmt=v=>FMT.format(Math.round(v));
+const fmtK=v=>v>=1e6?'€'+(v/1e6).toFixed(2)+'M':'€'+(v/1e3).toFixed(0)+'k';
+function fv(r,years,pmt){if(years<=0)return 0;const mr=r/12,n=years*12;if(mr===0)return pmt*n;return pmt*((Math.pow(1+mr,n)-1)/mr);}
+function realVal(nom,inf,years){return nom/Math.pow(1+inf,years);}
+const MILESTONES=[18,25,30,40,50,60,65];
+const SA=2,SY=2026,BASE=100;
+const SC={cons:{rate:0.06,label:'Conservador 6%',color:'#f5a623',cls:'cons'},base:{rate:0.09,label:'Esperado 9%',color:'#4e8ef7',cls:'base'},opt:{rate:0.12,label:'Optimista 12%',color:'#3dd68c',cls:'opt'}};
+let curSc='base';
+let ccInst=null,gcInst=null,cmpInst=null,wrInst=null;
+let lastCap=0;
+
+function setScenario(s){curSc=s;Object.keys(SC).forEach(k=>document.getElementById('sc-'+k).classList.toggle('active',k===s));renderTable();}
+
+function renderTable(){
+  const sc=SC[curSc];
+  const showReal=document.getElementById('toggle-inflation').checked;
+  const INFL=0.025;
+  document.getElementById('th-real').style.display=showReal?'':'none';
+  let html='';
+  MILESTONES.forEach(age=>{
+    const y=age-SA,inv=BASE*12*y,cap=fv(sc.rate,y,BASE),capR=realVal(cap,INFL,y),gain=cap-inv,mult=inv>0?(cap/inv).toFixed(1):'—',pct=cap>0?Math.round((gain/cap)*100):0;
+    html+=`<tr><td class="td-age">${age} años</td><td>${SY+y}</td><td>${y} años</td><td>${fmt(inv)}</td><td class="td-cap ${sc.cls}">${fmt(cap)}</td>${showReal?`<td class="td-real">${fmt(capR)}</td>`:''}<td class="td-cap ${sc.cls}">${fmt(gain)}</td><td><span class="badge ${sc.cls}">×${mult}</span></td><td><span class="badge ${sc.cls}">${pct}%</span></td></tr>`;
+  });
+  document.getElementById('proj-tbody').innerHTML=html;
+  const c65=fv(sc.rate,63,BASE),i65=BASE*12*63,r65=realVal(c65,INFL,63);
+  document.getElementById('proj-metrics').innerHTML=`
+    <div class="metric-card"><div class="metric-label">Capital a los 65 (nominal)</div><div class="metric-val" style="color:${sc.color}">${fmt(c65)}</div><div class="metric-sub">escenario ${sc.label}</div></div>
+    <div class="metric-card"><div class="metric-label">Capital a los 65 (real)</div><div class="metric-val" style="color:var(--accent)">${fmt(r65)}</div><div class="metric-sub">poder adquisitivo hoy</div></div>
+    <div class="metric-card"><div class="metric-label">Total aportado</div><div class="metric-val">${fmt(i65)}</div><div class="metric-sub">de tu bolsillo</div></div>
+    <div class="metric-card"><div class="metric-label">Multiplicador nominal</div><div class="metric-val" style="color:var(--gold)">×${(c65/i65).toFixed(1)}</div><div class="metric-sub">sobre lo invertido</div></div>`;
+  document.getElementById('proj-callout').querySelector('p').innerHTML=`Escenario <strong>${sc.label}</strong>: Unai llega a los 65 con <strong>${fmt(c65)}</strong> nominales (<strong>${fmt(r65)}</strong> en poder adquisitivo de hoy). El mercado genera <strong>${fmt(c65-i65)}</strong> — el ${Math.round((c65-i65)/c65*100)}% del capital final es interés compuesto puro.`;
+}
+
+function renderParallel(){
+  let html='';
+  MILESTONES.forEach(age=>{
+    const y=age-SA,inv=BASE*12*y,cC=fv(0.06,y,BASE),cB=fv(0.09,y,BASE),cO=fv(0.12,y,BASE),mult=inv>0?(cB/inv).toFixed(1):'—';
+    html+=`<tr><td>${age} años · ${SY+y}</td><td>${fmt(inv)}</td><td class="col-cons">${fmt(cC)}</td><td class="col-base">${fmt(cB)}</td><td class="col-opt">${fmt(cO)}</td><td><span class="badge base">×${mult}</span></td></tr>`;
+  });
+  document.getElementById('parallel-tbody').innerHTML=html;
+}
+
+function renderCompare(){
+  const rate=0.09,sA=[2,5,10,18],labels=['Empezar con 2 años','Empezar con 5 años','Empezar con 10 años','Empezar con 18 años'],colors=['#3dd68c','#4e8ef7','#f5a623','#ef4444'];
+  const caps=sA.map(a=>fv(rate,65-a,BASE)),base=caps[0];
+  let cardsHtml='';
+  sA.forEach((age,i)=>{
+    const y=65-age,inv=BASE*12*y,cap=caps[i],ib=i===0;
+    cardsHtml+=`<div class="cmp-card ${ib?'best':i===3?'worst':''}">
+      ${ib?'<div class="cmp-best-label">✦ Recomendado</div>':''}
+      <div class="cmp-title">${labels[i]}</div>
+      <div class="cmp-capital" style="color:${colors[i]}">${fmt(cap)}</div>
+      <div class="cmp-row"><span class="cmp-row-label">Años de inversión</span><span class="cmp-row-val">${y} años</span></div>
+      <div class="cmp-row"><span class="cmp-row-label">Total aportado</span><span class="cmp-row-val">${fmt(inv)}</span></div>
+      ${!ib?`<div class="cmp-row"><span class="cmp-row-label">Capital perdido</span><span class="cmp-row-val loss">−${fmt(base-cap)}</span></div>`:`<div class="cmp-row"><span class="cmp-row-label">Potencial máximo</span><span class="cmp-row-val green">${fmt(cap)}</span></div>`}
+    </div>`;
+  });
+  document.getElementById('compare-cards').innerHTML=cardsHtml;
+  document.getElementById('diff-text').textContent=fmt(caps[0]-caps[3]);
+  let bHtml='';
+  sA.forEach((age,i)=>{
+    const pct=Math.round((caps[i]/base)*100);
+    bHtml+=`<div class="delay-item"><div class="delay-header"><div class="delay-name">${labels[i]}</div><div class="delay-capital" style="color:${colors[i]}">${fmt(caps[i])}</div></div><div class="bar-track"><div class="bar-fill" style="width:0%;background:${colors[i]}" data-width="${pct}"></div></div><div class="delay-sub"><span>${pct}% del potencial máximo</span><span>${65-age} años de inversión</span></div></div>`;
+  });
+  document.getElementById('delay-bars').innerHTML=bHtml;
+  if(cmpInst)cmpInst.destroy();
+  cmpInst=new Chart(document.getElementById('compareChart'),{type:'bar',data:{labels,datasets:[{label:'Capital a los 65',data:caps.map(v=>Math.round(v)),backgroundColor:colors,borderRadius:7,borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+fmt(ctx.parsed.y)}}},scales:{y:{ticks:{callback:v=>fmtK(v),color:'#5a6a84',font:{size:11}},grid:{color:'rgba(255,255,255,0.04)'},border:{color:'transparent'}},x:{ticks:{color:'#5a6a84',font:{size:11,family:'DM Sans'}},grid:{display:false},border:{color:'transparent'}}}}});
+}
+
+function renderGrowth(){
+  const ages=[];for(let a=2;a<=65;a++)ages.push(a);
+  const labels=ages.map(a=>a%5===0||a===2?a+' años':'');
+  const inv=ages.map(a=>Math.round(BASE*12*(a-2))),cons=ages.map(a=>Math.round(fv(0.06,a-2,BASE))),base=ages.map(a=>Math.round(fv(0.09,a-2,BASE))),opt=ages.map(a=>Math.round(fv(0.12,a-2,BASE)));
+  if(gcInst)gcInst.destroy();
+  gcInst=new Chart(document.getElementById('growthChart'),{type:'line',data:{labels,datasets:[
+    {label:'Aportado',data:inv,borderColor:'rgba(245,166,35,0.6)',backgroundColor:'rgba(245,166,35,0.05)',borderWidth:1.5,pointRadius:0,fill:true,borderDash:[6,4]},
+    {label:'Conservador 6%',data:cons,borderColor:'#f5a623',backgroundColor:'transparent',borderWidth:1.5,pointRadius:0},
+    {label:'Esperado 9%',data:base,borderColor:'#4e8ef7',backgroundColor:'rgba(78,142,247,0.07)',borderWidth:2.5,pointRadius:0,fill:true},
+    {label:'Optimista 12%',data:opt,borderColor:'#3dd68c',backgroundColor:'transparent',borderWidth:1.5,pointRadius:0}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,callbacks:{label:ctx=>' '+ctx.dataset.label+': '+fmt(ctx.parsed.y)}}},scales:{y:{ticks:{callback:v=>fmtK(v),color:'#5a6a84',font:{size:11}},grid:{color:'rgba(255,255,255,0.04)'},border:{color:'transparent'}},x:{ticks:{color:'#5a6a84',font:{size:11},maxRotation:0},grid:{display:false},border:{color:'transparent'}}}}});
+}
+
+function renderCalc(){
+  const monthly=parseInt(document.getElementById('ctrl-monthly').value);
+  const rate=parseFloat(document.getElementById('ctrl-rate').value)/100;
+  const startAge=parseInt(document.getElementById('ctrl-start').value);
+  const endAge=parseInt(document.getElementById('ctrl-end').value);
+  const infl=parseFloat(document.getElementById('ctrl-infl').value)/100;
+  document.getElementById('lbl-monthly').textContent=monthly+' €';
+  document.getElementById('lbl-rate').textContent=(rate*100).toFixed(1)+'%';
+  document.getElementById('lbl-start').textContent=startAge+' años';
+  document.getElementById('lbl-end').textContent=endAge+' años';
+  document.getElementById('lbl-infl').textContent=(infl*100).toFixed(1)+'%';
+  const errEl=document.getElementById('calc-error');
+  if(endAge<=startAge){errEl.style.display='block';errEl.textContent='⚠️ La edad de retirada ('+endAge+' años) debe ser mayor que la de inicio ('+startAge+' años).';document.getElementById('calc-invested').textContent='—';document.getElementById('calc-final').textContent='—';document.getElementById('calc-real').textContent='—';document.getElementById('calc-mult').textContent='—';return;}
+  errEl.style.display=monthly===0?'block':'none';
+  if(monthly===0)errEl.textContent='ℹ️ Con aportación 0 € el capital final será 0 €.';
+  const years=endAge-startAge,inv=monthly*12*years,cap=fv(rate,years,monthly),capReal=realVal(cap,infl,years),gain=Math.max(0,cap-inv),mult=inv>0?(capReal/inv).toFixed(1):'0.0';
+  document.getElementById('calc-invested').textContent=fmt(inv);
+  document.getElementById('calc-final').textContent=fmt(cap);
+  document.getElementById('calc-real').textContent=fmt(capReal);
+  document.getElementById('calc-mult').textContent='×'+mult;
+  lastCap=cap;
+  document.getElementById('lbl-wr-capital').textContent=fmt(cap);
+  renderWithdrawal();
+  if(ccInst)ccInst.destroy();
+  ccInst=new Chart(document.getElementById('calcChart'),{type:'doughnut',data:{labels:['Aportado','Ganancia del mercado'],datasets:[{data:[Math.max(0,Math.round(inv)),Math.round(gain)],backgroundColor:['#4e8ef7','#3dd68c'],borderWidth:0,hoverOffset:4}]},options:{responsive:true,maintainAspectRatio:false,cutout:'72%',plugins:{legend:{display:true,position:'bottom',labels:{color:'#8a99b3',font:{size:11,family:'DM Sans'},boxWidth:10}},tooltip:{callbacks:{label:ctx=>' '+ctx.label+': '+fmt(ctx.parsed)}}}}});
+}
+
+function renderWithdrawal(){
+  const capital=lastCap,wM=parseInt(document.getElementById('ctrl-wr-monthly').value),wR=parseFloat(document.getElementById('ctrl-wr-rate').value)/100;
+  document.getElementById('lbl-wr-monthly').textContent=fmt(wM);
+  document.getElementById('lbl-wr-rate').textContent=(wR*100).toFixed(1)+'%';
+  document.getElementById('wr-capital').textContent=fmt(capital);
+  const mr=wR/12,perpetua=capital*mr;
+  document.getElementById('wr-perpetua').textContent=fmt(perpetua);
+  let bal=capital,months=0,totalW=0;
+  const hist=[bal];
+  const MAX=1200;
+  if(wM<=perpetua){
+    for(let m=0;m<600;m++){bal=bal*(1+mr)-wM;hist.push(Math.max(0,bal));}
+    document.getElementById('wr-duration').textContent='∞ renta perpetua';
+    document.getElementById('wr-duration').className='wr-val green';
+    document.getElementById('wr-total').textContent='Indefinido';
+    document.getElementById('wr-callout').innerHTML=`<strong style="color:var(--accent2)">¡Renta perpetua!</strong> Con ${fmt(wM)}/mes el capital nunca se agota — de hecho <strong>sigue creciendo</strong>. Renta máxima perpetua: <strong>${fmt(perpetua)}</strong>/mes.`;
+  } else {
+    while(bal>0&&months<MAX){bal=bal*(1+mr)-wM;totalW+=wM;if(bal<=0){totalW+=bal;bal=0;}hist.push(Math.max(0,bal));months++;}
+    const yy=Math.floor(months/12),mm=months%12;
+    document.getElementById('wr-duration').textContent=months<MAX?yy+'a '+mm+'m':'>100 años';
+    document.getElementById('wr-duration').className='wr-val';
+    document.getElementById('wr-total').textContent=fmt(Math.max(0,totalW));
+    document.getElementById('wr-callout').innerHTML=months>=MAX?`Con ${fmt(wM)}/mes el capital dura más de 100 años. Renta perpetua máxima: <strong>${fmt(perpetua)}</strong>/mes.`:`Con ${fmt(wM)}/mes el capital dura <strong>${yy} años y ${mm} meses</strong>, retirando <strong>${fmt(totalW)}</strong> en total. Para renta perpetua: <strong>${fmt(perpetua)}</strong>/mes.`;
+  }
+  const step=Math.max(1,Math.floor(hist.length/120));
+  const cData=hist.filter((_,i)=>i%step===0);
+  const cLabels=cData.map((_,i)=>{const m=i*step;return m%12===0?Math.floor(m/12)+'a':'';});
+  if(wrInst)wrInst.destroy();
+  wrInst=new Chart(document.getElementById('wrChart'),{type:'line',data:{labels:cLabels,datasets:[{label:'Capital restante',data:cData,borderColor:'#4e8ef7',backgroundColor:'rgba(78,142,247,0.08)',borderWidth:2,pointRadius:0,fill:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+fmt(ctx.parsed.y)}}},scales:{y:{ticks:{callback:v=>fmtK(v),color:'#5a6a84',font:{size:11}},grid:{color:'rgba(255,255,255,0.04)'},border:{color:'transparent'}},x:{ticks:{color:'#5a6a84',font:{size:11},maxRotation:0},grid:{display:false},border:{color:'transparent'}}}}});
+}
+
+function shareCalc(){
+  const p=`?monthly=${document.getElementById('ctrl-monthly').value}&rate=${document.getElementById('ctrl-rate').value}&start=${document.getElementById('ctrl-start').value}&end=${document.getElementById('ctrl-end').value}&infl=${document.getElementById('ctrl-infl').value}`;
+  const url=window.location.href.split('?')[0]+p;
+  document.getElementById('share-url').textContent=url;
+  document.getElementById('share-banner').style.display='flex';
+  navigator.clipboard.writeText(url).catch(()=>{});
+}
+function copyUrl(){
+  navigator.clipboard.writeText(document.getElementById('share-url').textContent).then(()=>{const b=document.querySelector('.btn-copy');b.textContent='✓ Copiado';setTimeout(()=>b.textContent='Copiar',2000);});
+}
+function loadFromUrl(){
+  const p=new URLSearchParams(window.location.search);
+  if(p.get('monthly'))document.getElementById('ctrl-monthly').value=p.get('monthly');
+  if(p.get('rate'))document.getElementById('ctrl-rate').value=p.get('rate');
+  if(p.get('start'))document.getElementById('ctrl-start').value=p.get('start');
+  if(p.get('end'))document.getElementById('ctrl-end').value=p.get('end');
+  if(p.get('infl'))document.getElementById('ctrl-infl').value=p.get('infl');
+  if(p.toString())setTimeout(()=>document.getElementById('calculadora').scrollIntoView({behavior:'smooth',block:'center'}),400);
+}
+function initObserver(){
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('visible');
+        if(e.target.id==='comparativa')setTimeout(()=>document.querySelectorAll('.bar-fill').forEach(b=>{b.style.width=b.dataset.width+'%';}),200);
+      }
+    });
+  },{threshold:0.08});
+  document.querySelectorAll('.fade-in').forEach(el=>obs.observe(el));
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  loadFromUrl();
+  renderTable();
+  renderParallel();
+  renderCompare();
+  renderGrowth();
+  renderCalc();
+  initObserver();
+});
+</script>
+</body>
+</html>
