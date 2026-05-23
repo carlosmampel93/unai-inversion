@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Futuro Financiero de Unai &middot; MSCI World (IWDA)</title>
+<meta property="og:title" content="El Futuro Financiero de Unai · MSCI World (IWDA)">
+<meta property="og:description" content="100€/mes desde los 2 años en MSCI World. Simulador interactivo del poder del interés compuesto a largo plazo.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌱</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌱</text></svg>">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS ── */
+:root{
+  --bg:#080d18;--bg2:#0c1220;--bg3:#111828;
+  --surface:#141e30;--surface2:#1c2840;--surface-alt:#0f1a2e;
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.12);
+  --text:#edf2fa;--text2:#8fa3bf;--text3:#4e6280;
+  --accent:#5b9cf6;--accent2:#34d47e;--accent3:#f0a732;--accent4:#f05252;
+  --gold:#c99b38;
+  --shadow:0 4px 24px rgba(0,0,0,0.35);
+  --shadow-sm:0 2px 8px rgba(0,0,0,0.25);
+  --radius:12px;--radius-sm:8px;
+  --font-display:'Lora',Georgia,serif;--font-body:'DM Sans',system-ui,sans-serif;
+}
+[data-theme="light"]{
+  --bg:#f2f5fb;--bg2:#e8ecf5;--bg3:#dde3ef;
+  --surface:#ffffff;--surface2:#f4f6fc;--surface-alt:#edf0f8;
+  --border:rgba(0,0,0,0.07);--border2:rgba(0,0,0,0.13);
+  --text:#0d1526;--text2:#3d5070;--text3:#7a90aa;
+  --accent:#1d5fd4;--accent2:#0e7a4a;--accent3:#a0620a;--accent4:#c0282a;
+  --gold:#8a5e08;
+  --shadow:0 4px 20px rgba(0,0,0,0.10);
+  --shadow-sm:0 2px 6px rgba(0,0,0,0.07);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:15px;line-height:1.65;min-height:100vh;transition:background .35s,color .35s;}
+
+/* ── NAV ── */
+nav{position:sticky;top:0;z-index:100;background:rgba(8,13,24,0.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:.7rem 0;}
+[data-theme="light"] nav{background:rgba(242,245,251,0.96);}
+.nav-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;}
+.nav-brand{font-family:var(--font-display);font-size:15px;color:var(--text);font-weight:600;letter-spacing:-.01em;}
+.nav-brand span{color:var(--accent);}
+.nav-links{display:flex;gap:1.1rem;flex-wrap:wrap;align-items:center;}
+.nav-links a{font-size:12px;color:var(--text3);text-decoration:none;transition:color .2s;white-space:nowrap;}
+.nav-links a:hover{color:var(--text);}
+.theme-btn{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:12px;color:var(--text2);cursor:pointer;font-family:var(--font-body);transition:background .2s,color .2s;}
+.theme-btn:hover{background:var(--surface2);color:var(--text);}
+.hamburger{display:none;background:none;border:none;cursor:pointer;padding:4px;color:var(--text2);font-size:1.3rem;}
+
+/* ── HERO ── */
+.hero{position:relative;overflow:hidden;padding:5.5rem 0 4.5rem;text-align:center;border-bottom:1px solid var(--border);}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 55% at 50% 0%,rgba(91,156,246,.13) 0%,transparent 68%);pointer-events:none;}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(91,156,246,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(91,156,246,.035) 1px,transparent 1px);background-size:64px 64px;pointer-events:none;}
+.hero-eyebrow{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(91,156,246,.28);padding:5px 16px;border-radius:100px;margin-bottom:1.75rem;position:relative;background:rgba(91,156,246,.06);}
+.hero h1{font-family:var(--font-display);font-size:clamp(2.2rem,5.5vw,3.8rem);font-weight:600;color:var(--text);line-height:1.12;margin-bottom:1.1rem;position:relative;letter-spacing:-.02em;}
+.hero h1 em{color:var(--accent);font-style:italic;}
+.hero-sub{font-size:16px;color:var(--text2);max-width:500px;margin:0 auto 2.5rem;position:relative;line-height:1.7;}
+.hero-stats{display:flex;justify-content:center;gap:0;flex-wrap:wrap;position:relative;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;max-width:680px;margin:0 auto;}
+.hero-stat{flex:1;min-width:130px;padding:1.25rem 1rem;border-right:1px solid var(--border);text-align:center;}
+.hero-stat:last-child{border-right:none;}
+.hero-stat-val{font-family:var(--font-display);font-size:1.75rem;font-weight:600;display:block;margin-bottom:2px;line-height:1.2;}
+.hero-stat:nth-child(1) .hero-stat-val{color:var(--accent);}
+.hero-stat:nth-child(2) .hero-stat-val{color:var(--text2);}
+.hero-stat:nth-child(3) .hero-stat-val{color:var(--accent2);}
+.hero-stat:nth-child(4) .hero-stat-val{color:var(--gold);}
+.hero-stat-label{font-size:11px;color:var(--text3);letter-spacing:.04em;}
+
+/* ── LAYOUT ── */
+.container{max-width:980px;margin:0 auto;padding:0 1.5rem;}
+.section{padding:4rem 0;border-bottom:1px solid var(--border);}
+.section:last-child{border-bottom:none;}
+.section.alt-bg{background:var(--surface-alt);}
+.section-label{font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:.6rem;display:flex;align-items:center;gap:.5rem;}
+.section-label::before{content:'';display:inline-block;width:16px;height:2px;background:var(--accent);border-radius:2px;}
+.section-title{font-family:var(--font-display);font-size:clamp(1.4rem,3vw,1.9rem);font-weight:600;color:var(--text);line-height:1.25;margin-bottom:.65rem;letter-spacing:-.02em;}
+.section-desc{font-size:14px;color:var(--text2);line-height:1.8;margin-bottom:2rem;max-width:680px;}
+
+/* ── SCENARIO CARDS ── */
+.scenario-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:1.5rem;}
+.sc-btn{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.25rem;cursor:pointer;text-align:left;transition:border-color .2s,background .2s,transform .1s;font-family:var(--font-body);}
+.sc-btn:hover{border-color:var(--border2);background:var(--surface2);transform:translateY(-1px);}
+.sc-btn.active.cons{border-color:var(--accent3);background:rgba(240,167,50,.07);box-shadow:0 0 0 1px var(--accent3);}
+.sc-btn.active.base{border-color:var(--accent);background:rgba(91,156,246,.07);box-shadow:0 0 0 1px var(--accent);}
+.sc-btn.active.opt{border-color:var(--accent2);background:rgba(52,212,126,.07);box-shadow:0 0 0 1px var(--accent2);}
+.sc-name{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:5px;}
+.sc-rate{font-size:22px;font-weight:700;letter-spacing:-.02em;line-height:1.1;}
+.sc-rate.cons{color:var(--accent3);}.sc-rate.base{color:var(--accent);}.sc-rate.opt{color:var(--accent2);}
+.sc-desc{font-size:12px;color:var(--text3);margin-top:5px;line-height:1.5;}
+
+/* ── METRICS ── */
+.metric-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:1.75rem;}
+.metric-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.25rem;transition:border-color .2s;}
+.metric-card:hover{border-color:var(--border2);}
+.metric-card.featured{border-color:rgba(91,156,246,.35);background:rgba(91,156,246,.05);grid-column:span 2;}
+.metric-label{font-size:11px;color:var(--text3);letter-spacing:.04em;margin-bottom:6px;font-weight:500;}
+.metric-val{font-size:1.4rem;font-weight:700;font-family:var(--font-display);color:var(--text);letter-spacing:-.02em;line-height:1.2;}
+.metric-sub{font-size:11px;color:var(--text3);margin-top:4px;}
+
+/* ── TABLE ── */
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:var(--radius);border:1px solid var(--border);}
+.table-wrap::after{content:'← desliza →';display:none;text-align:center;font-size:11px;color:var(--text3);padding:.4rem;}
+@media(max-width:680px){.table-wrap::after{display:block;}}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+thead th{padding:11px 14px;text-align:left;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);background:var(--surface2);border-bottom:1px solid var(--border2);white-space:nowrap;}
+tbody td{padding:12px 14px;border-bottom:1px solid var(--border);color:var(--text2);white-space:nowrap;}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:hover td{background:rgba(255,255,255,.025);}
+[data-theme="light"] tbody tr:hover td{background:rgba(0,0,0,.025);}
+.td-age{font-weight:700;color:var(--text);font-size:13.5px;}
+.td-cap{font-weight:700;}
+.td-cap.cons{color:var(--accent3);}.td-cap.base{color:var(--accent);}.td-cap.opt{color:var(--accent2);}
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px;letter-spacing:.02em;}
+.badge.cons{background:rgba(240,167,50,.14);color:var(--accent3);}
+.badge.base{background:rgba(91,156,246,.14);color:var(--accent);}
+.badge.opt{background:rgba(52,212,126,.14);color:var(--accent2);}
+.badge.gray{background:rgba(128,128,128,.12);color:var(--text3);}
+
+/* ── TOGGLE ── */
+.toggle-row{display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;font-size:13px;color:var(--text2);flex-wrap:wrap;row-gap:.5rem;}
+.toggle{position:relative;display:inline-block;width:38px;height:21px;flex-shrink:0;}
+.toggle input{opacity:0;width:0;height:0;}
+.toggle-slider{position:absolute;inset:0;background:var(--surface2);border-radius:21px;transition:.3s;cursor:pointer;border:1px solid var(--border2);}
+.toggle-slider::before{content:'';position:absolute;width:15px;height:15px;left:2px;bottom:2px;background:var(--text3);border-radius:50%;transition:.3s;}
+.toggle input:checked+.toggle-slider{background:var(--accent);border-color:var(--accent);}
+.toggle input:checked+.toggle-slider::before{transform:translateX(17px);background:#fff;}
+
+/* ── CALLOUT ── */
+.callout{border-radius:var(--radius-sm);padding:1.25rem 1.4rem 1.25rem 4rem;margin-top:1.5rem;font-size:14px;color:var(--text2);line-height:1.75;position:relative;border:1px solid var(--border);}
+.callout::before{position:absolute;left:1.2rem;top:1.1rem;font-size:1.3rem;line-height:1;}
+.callout.default{background:rgba(91,156,246,.06);border-left:3px solid var(--accent);}
+.callout.default::before{content:'💡';}
+.callout.green{background:rgba(52,212,126,.06);border-left:3px solid var(--accent2);}
+.callout.green::before{content:'✅';}
+.callout.gold{background:rgba(240,167,50,.06);border-left:3px solid var(--accent3);}
+.callout.gold::before{content:'⭐';}
+.callout.red{background:rgba(240,82,82,.06);border-left:3px solid var(--accent4);}
+.callout.red::before{content:'⚡';}
+.callout strong{color:var(--text);font-weight:600;}
+
+/* ── PARALLEL TABLE ── */
+.parallel-table-wrap{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--border);}
+.parallel-table{width:100%;border-collapse:collapse;font-size:13px;}
+.parallel-table th{padding:11px 14px;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);background:var(--surface2);border-bottom:1px solid var(--border2);text-align:right;white-space:nowrap;}
+.parallel-table th:first-child{text-align:left;}
+.parallel-table td{padding:12px 14px;border-bottom:1px solid var(--border);text-align:right;white-space:nowrap;color:var(--text2);}
+.parallel-table td:first-child{text-align:left;font-weight:700;color:var(--text);font-size:13.5px;}
+.parallel-table tr:last-child td{border-bottom:none;}
+.parallel-table tr:hover td{background:rgba(255,255,255,.02);}
+[data-theme="light"] .parallel-table tr:hover td{background:rgba(0,0,0,.02);}
+.col-cons{color:var(--accent3)!important;font-weight:700;}
+.col-base{color:var(--accent)!important;font-weight:700;}
+.col-opt{color:var(--accent2)!important;font-weight:700;}
+.col-dep{color:var(--text3)!important;font-weight:500;}
+.col-cash{color:var(--accent4)!important;font-weight:500;}
+
+/* ── COMPARE CARDS ── */
+.compare-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:1.5rem;}
+.cmp-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.3rem;transition:transform .2s,border-color .2s;}
+.cmp-card:hover{transform:translateY(-2px);}
+.cmp-card.best{border-color:rgba(52,212,126,.4);background:linear-gradient(135deg,rgba(52,212,126,.07) 0%,rgba(52,212,126,.02) 100%);}
+.cmp-card.worst{opacity:.65;}
+.cmp-best-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);margin-bottom:7px;}
+.cmp-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:10px;line-height:1.4;}
+.cmp-capital{font-family:var(--font-display);font-size:1.4rem;font-weight:700;margin-bottom:8px;letter-spacing:-.02em;}
+.cmp-row{display:flex;justify-content:space-between;font-size:12px;margin-top:6px;}
+.cmp-row-label{color:var(--text3);}
+.cmp-row-val{color:var(--text2);font-weight:600;}
+.cmp-row-val.loss{color:var(--accent4);}
+.cmp-row-val.green{color:var(--accent2);}
+
+/* ── BARS ── */
+.delay-item{margin-bottom:1.4rem;}
+.delay-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px;}
+.delay-name{font-size:13px;font-weight:600;color:var(--text);}
+.delay-capital{font-size:13px;font-weight:700;}
+.bar-track{height:9px;background:var(--surface2);border-radius:100px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:100px;transition:width 1.2s cubic-bezier(.4,0,.2,1);}
+.delay-sub{display:flex;justify-content:space-between;margin-top:5px;font-size:11px;color:var(--text3);}
+
+/* ── CHART ── */
+.chart-wrap{position:relative;width:100%;padding:0 4px;}
+.legend-row{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:.85rem;font-size:12px;color:var(--text2);}
+.legend-item{display:flex;align-items:center;gap:6px;}
+.legend-swatch{width:24px;height:3px;border-radius:2px;flex-shrink:0;}
+
+/* ── CONTROLS ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:start;}
+.control-group{margin-bottom:1.35rem;}
+.control-label{font-size:13px;color:var(--text2);margin-bottom:9px;display:flex;justify-content:space-between;align-items:center;font-weight:500;}
+.ctl-val{color:var(--accent);font-weight:700;font-size:14px;font-family:var(--font-display);}
+input[type="range"]{-webkit-appearance:none;width:100%;height:4px;background:var(--surface2);border-radius:2px;outline:none;cursor:pointer;border:1px solid var(--border);}
+input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;background:var(--accent);border-radius:50%;cursor:pointer;border:2px solid var(--bg);box-shadow:0 2px 6px rgba(0,0,0,0.3);}
+input[type="range"]::-moz-range-thumb{width:18px;height:18px;background:var(--accent);border-radius:50%;cursor:pointer;border:2px solid var(--bg);}
+
+/* ── WITHDRAWAL ── */
+.withdrawal-result{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;box-shadow:var(--shadow-sm);}
+.wr-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:1rem;letter-spacing:-.01em;}
+.wr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;}
+.wr-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.95rem 1rem;}
+.wr-label{font-size:11px;color:var(--text3);margin-bottom:5px;font-weight:500;}
+.wr-val{font-size:1.05rem;font-weight:700;color:var(--text);font-family:var(--font-display);}
+.wr-val.green{color:var(--accent2);}
+
+/* ── LIFE CARDS ── */
+.life-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:12px;margin-top:1.5rem;}
+.life-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;text-align:center;transition:transform .2s,border-color .2s;position:relative;overflow:hidden;}
+.life-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));}
+.life-card:hover{transform:translateY(-2px);border-color:var(--border2);}
+.life-icon{font-size:1.7rem;margin-bottom:.6rem;display:block;}
+.life-title{font-size:12px;color:var(--text3);margin-bottom:5px;font-weight:500;}
+.life-val{font-size:1.05rem;font-weight:700;color:var(--accent2);font-family:var(--font-display);}
+.life-sub{font-size:11px;color:var(--text3);margin-top:4px;line-height:1.4;}
+
+/* ── CRISIS ── */
+.crisis-box{background:rgba(240,82,82,.05);border:1px solid rgba(240,82,82,.18);border-radius:var(--radius);padding:1.35rem;margin-top:1.5rem;}
+.crisis-title{font-size:13px;font-weight:700;color:var(--accent4);margin-bottom:.85rem;display:flex;align-items:center;gap:.5rem;}
+.crisis-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;}
+.crisis-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.95rem 1rem;}
+.crisis-label{font-size:11px;color:var(--text3);margin-bottom:4px;font-weight:500;}
+.crisis-val{font-size:1.05rem;font-weight:700;font-family:var(--font-display);}
+
+/* ── SHARE ── */
+.share-row{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;background:rgba(52,212,126,.07);border:1px solid rgba(52,212,126,.2);border-radius:var(--radius-sm);padding:.75rem 1rem;margin-top:.75rem;}
+.share-url-txt{font-size:12px;color:var(--text2);font-family:monospace;flex:1;min-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.btn-copy{background:var(--accent2);color:#071a0e;border:none;border-radius:5px;padding:5px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-body);}
+
+/* ── BUTTONS ── */
+.btn-primary{background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);padding:.65rem 1.3rem;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font-body);margin-right:.5rem;margin-top:.5rem;transition:opacity .2s,transform .1s;letter-spacing:.01em;}
+.btn-primary:hover{opacity:.88;transform:translateY(-1px);}
+
+/* ── SOURCES ── */
+.source-list{list-style:none;}
+.source-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.1rem 1.25rem;margin-bottom:9px;display:grid;grid-template-columns:auto 1fr;gap:1rem;align-items:start;transition:border-color .2s;}
+.source-item:hover{border-color:var(--border2);}
+.source-num{font-size:11px;font-weight:700;color:var(--accent);background:rgba(91,156,246,.12);width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+.source-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px;}
+.source-org{font-size:12px;color:var(--accent2);margin-bottom:4px;font-weight:600;}
+.source-desc{font-size:12px;color:var(--text3);line-height:1.65;}
+.source-link{font-size:12px;color:var(--accent);text-decoration:none;display:inline-block;margin-top:5px;}
+.source-link:hover{text-decoration:underline;}
+
+/* ── HOW IT WORKS ── */
+.how-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:14px;margin-top:1.5rem;}
+.how-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.3rem;transition:border-color .2s,transform .2s;}
+.how-card:hover{border-color:var(--border2);transform:translateY(-1px);}
+.how-icon{font-size:1.5rem;margin-bottom:.75rem;display:block;}
+.how-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px;}
+.how-desc{font-size:12px;color:var(--text3);line-height:1.7;}
+.formula-box{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:1.1rem 1.6rem;font-family:'Courier New',monospace;font-size:13px;color:var(--accent2);margin:1.1rem 0;line-height:2;}
+.disclaimer{background:rgba(240,167,50,.05);border:1px solid rgba(240,167,50,.18);border-radius:var(--radius-sm);padding:1.1rem 1.25rem;font-size:12px;color:var(--text3);line-height:1.8;margin-top:2rem;}
+.disclaimer strong{color:var(--accent3);}
+
+/* ── FOOTER ── */
+.footer{background:var(--bg2);border-top:1px solid var(--border);padding:2.5rem 0;text-align:center;font-size:12px;color:var(--text3);line-height:2;}
+
+/* ── ANIMATIONS ── */
+.fade-in{opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease;}
+.fade-in.visible{opacity:1;transform:translateY(0);}
+@keyframes countUp{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.metric-val{animation:countUp .4s ease both;}
+
+/* ── PRINT ── */
+@media print{
+  nav,.hamburger,.mobile-menu,.theme-btn,.btn-primary,.btn-copy,.share-row,input[type="range"],.toggle,.toggle-row{display:none!important;}
+  body{background:#fff!important;color:#000!important;font-size:12px;}
+  .hero{padding:2rem 0 1.5rem;background:#fff!important;}
+  .hero::before,.hero-grid{display:none;}
+  .hero h1{font-size:1.8rem!important;color:#000!important;}
+  .hero h1 em{color:#1d5fd4!important;}
+  .hero-sub,.hero-stat-label{color:#444!important;}
+  .hero-stats{border:1px solid #ddd!important;}
+  .section{padding:1.5rem 0;page-break-inside:avoid;}
+  .section-title{font-size:1.1rem!important;}
+  .metric-card,.how-card,.cmp-card,.source-item,.life-card,.wr-card,.crisis-card{background:#f8f9fb!important;border:1px solid #ddd!important;}
+  .metric-val,.section-title,.td-age,.cmp-title{color:#000!important;}
+  .metric-label,.metric-sub,.section-desc,.how-desc,.source-desc{color:#555!important;}
+  .callout{background:#f8f9fb!important;border:1px solid #ccc!important;}
+  .formula-box{background:#f0f4ff!important;color:#1a3a80!important;border:1px solid #c0d0f0!important;}
+  .disclaimer{background:#fff8e8!important;border:1px solid #e8c860!important;}
+  .chart-wrap{page-break-inside:avoid;max-height:250px!important;}
+  .fade-in{opacity:1!important;transform:none!important;}
+  .table-wrap,.parallel-table-wrap{border:1px solid #ddd!important;border-radius:4px!important;}
+  thead th{background:#f0f3f8!important;color:#555!important;}
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:680px){
+  .scenario-row,.two-col,.compare-grid{grid-template-columns:1fr;}
+  .hamburger{display:block;}
+  .mobile-menu{display:none;position:fixed;top:48px;left:0;right:0;background:var(--bg2);border-bottom:1px solid var(--border);padding:1rem 1.25rem;z-index:99;flex-direction:column;gap:.75rem;}
+  .mobile-menu.open{display:flex;}
+  .mobile-menu a{font-size:14px;color:var(--text2);text-decoration:none;padding:.3rem 0;border-bottom:1px solid var(--border);}
+  .nav-links{display:none;}
+  .hero{padding:3.5rem 0 3rem;}
+  .hero h1{font-size:2.1rem;}
+  .hero-stats{flex-direction:row;}
+  .hero-stat{min-width:100px;padding:1rem .75rem;}
+  .metric-row{grid-template-columns:1fr 1fr;}
+  .life-grid{grid-template-columns:1fr 1fr;}
+  .section{padding:2.5rem 0;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <div class="nav-inner">
+      <div class="nav-brand">Unai &middot; <span>MSCI World</span></div>
+      <button class="hamburger" onclick="toggleMobileMenu()">&#9776;</button>
+      <div class="nav-links">
+        <a href="#proyecciones">Proyecciones</a>
+        <a href="#paralela">3 Escenarios</a>
+        <a href="#vsdeposito">vs Dep&oacute;sito</a>
+        <a href="#comparativa">Costo de esperar</a>
+        <a href="#calculadora">Calculadora</a>
+        <a href="#retirada">Retirada</a>
+        <a href="#vidaReal">Vida real</a>
+        <a href="#crisis">Crisis</a>
+        <a href="#metodologia">Metodolog&iacute;a</a>
+        <button class="theme-btn" onclick="toggleTheme()">&#9728;&#65039; Modo claro</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#proyecciones" onclick="closeMobileMenu()">Proyecciones</a>
+  <a href="#paralela" onclick="closeMobileMenu()">3 Escenarios</a>
+  <a href="#vsdeposito" onclick="closeMobileMenu()">vs Depósito</a>
+  <a href="#comparativa" onclick="closeMobileMenu()">Costo de esperar</a>
+  <a href="#calculadora" onclick="closeMobileMenu()">Calculadora</a>
+  <a href="#retirada" onclick="closeMobileMenu()">Retirada</a>
+  <a href="#vidaReal" onclick="closeMobileMenu()">Vida real</a>
+  <a href="#crisis" onclick="closeMobileMenu()">Crisis</a>
+  <a href="#metodologia" onclick="closeMobileMenu()">Metodología</a>
+</div>
+
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="container">
+    <div class="hero-eyebrow">Reporte de inversi&oacute;n &middot; Inter&eacute;s compuesto</div>
+    <h1>El futuro financiero<br>de <em>Unai</em></h1>
+    <p class="hero-sub">100 &euro; al mes en el ETF MSCI World (IWDA) desde los 2 a&ntilde;os.<br>Una lecci&oacute;n sobre el poder del tiempo y el inter&eacute;s compuesto.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><span class="hero-stat-val">100 &euro;</span><span class="hero-stat-label">aportaci&oacute;n mensual</span></div>
+      <div class="hero-stat"><span class="hero-stat-val">63 a&ntilde;os</span><span class="hero-stat-label">horizonte de inversi&oacute;n</span></div>
+      <div class="hero-stat"><span class="hero-stat-val">~9% / a&ntilde;o</span><span class="hero-stat-label">rentabilidad hist&oacute;rica MSCI World</span></div>
+      <div class="hero-stat"><span class="hero-stat-val">&times;18</span><span class="hero-stat-label">multiplicador esperado a los 65</span></div>
+    </div>
+    <div style="margin-top:1.5rem;position:relative;">
+      <button class="btn-primary" onclick="window.print()" style="background:transparent;border:1px solid rgba(78,142,247,0.4);color:var(--accent);font-size:12px;padding:.4rem 1rem;">🖨️ Imprimir / Guardar PDF</button>
+    </div>
+  </div>
+</div>
+
+<!-- 01 PROYECCIONES -->
+<div class="section fade-in" id="proyecciones">
+  <div class="container">
+    <div class="section-label">01 &middot; Proyecciones</div>
+    <div class="section-title">Capital acumulado por edades</div>
+    <div class="section-desc">Elige un escenario de rentabilidad. Activa el toggle de inflaci&oacute;n para ver el poder adquisitivo real. Activa &ldquo;Aportaci&oacute;n creciente&rdquo; para simular que Unai incrementa un 2% anual sus aportaciones al ganar m&aacute;s.</div>
+    <div class="scenario-row">
+      <button class="sc-btn cons" id="sc-cons" onclick="setScenario('cons')"><div class="sc-name">Conservador</div><div class="sc-rate cons">6% anual</div><div class="sc-desc">Crisis frecuentes, d&eacute;cadas planas</div></button>
+      <button class="sc-btn base active" id="sc-base" onclick="setScenario('base')"><div class="sc-name">Esperado &#10022;</div><div class="sc-rate base">9% anual</div><div class="sc-desc">Media hist&oacute;rica MSCI World 1970&ndash;2024</div></button>
+      <button class="sc-btn opt" id="sc-opt" onclick="setScenario('opt')"><div class="sc-name">Optimista</div><div class="sc-rate opt">12% anual</div><div class="sc-desc">D&eacute;cadas con fuerte crecimiento</div></button>
+    </div>
+    <div class="toggle-row">
+      <label class="toggle"><input type="checkbox" id="toggle-inflation" onchange="renderTable()"><span class="toggle-slider"></span></label>
+      <span>Ajuste por inflaci&oacute;n (2,5% anual) &mdash; muestra valor real</span>
+      <label class="toggle"><input type="checkbox" id="toggle-growing" onchange="renderTable()"><span class="toggle-slider"></span></label>
+      <span>Aportaci&oacute;n creciente (+2% anual)</span>
+      <label class="toggle"><input type="checkbox" id="toggle-tax" onchange="renderTable()"><span class="toggle-slider"></span></label>
+      <span>IRPF al rescate (19%)</span>
+    </div>
+    <div id="proj-metrics" class="metric-row"></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Edad</th><th>A&ntilde;o</th><th>A&ntilde;os</th><th>Total aportado</th><th>Capital bruto</th><th id="th-real" style="display:none">Capital real</th><th id="th-tax" style="display:none">Capital neto IRPF</th><th>Ganancia</th><th>Multiplicador</th><th>% mercado</th></tr></thead>
+        <tbody id="proj-tbody"></tbody>
+      </table>
+    </div>
+    <div class="callout default" id="proj-callout"><p></p></div>
+  </div>
+</div>
+
+<!-- 02 TABLA PARALELA -->
+<div class="section alt-bg fade-in" id="paralela">
+  <div class="container">
+    <div class="section-label">02 &middot; Los tres escenarios en paralelo</div>
+    <div class="section-title">Comparativa directa de escenarios</div>
+    <div class="section-desc">Los tres escenarios enfrentados por edad junto con el impacto del IRPF (19% sobre plusval&iacute;as) en el escenario esperado. Sin necesidad de cambiar opciones.</div>
+    <div class="parallel-table-wrap">
+      <table class="parallel-table">
+        <thead><tr><th style="text-align:left">Edad / A&ntilde;o</th><th>Aportado</th><th style="color:var(--accent3)">Conservador 6%</th><th style="color:var(--accent)">Esperado 9%</th><th style="color:var(--accent2)">Optimista 12%</th><th style="color:var(--text3)">Esperado &minus; IRPF 19%</th><th>Mult. esperado</th></tr></thead>
+        <tbody id="parallel-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- 03 VS DEPOSITO -->
+<div class="section fade-in" id="vsdeposito">
+  <div class="container">
+    <div class="section-label">03 &middot; Comparativa con alternativas</div>
+    <div class="section-title">MSCI World vs dep&oacute;sito bancario vs cuenta corriente</div>
+    <div class="section-desc">La misma aportaci&oacute;n de 100 &euro;/mes durante el mismo tiempo. La diferencia es devastadora y demuestra el coste de no invertir.</div>
+    <div class="parallel-table-wrap">
+      <table class="parallel-table">
+        <thead><tr>
+          <th style="text-align:left">Edad / A&ntilde;o</th>
+          <th>Aportado</th>
+          <th style="color:var(--accent)">MSCI World 9%</th>
+          <th style="color:var(--accent3)">Dep&oacute;sito 3%</th>
+          <th style="color:var(--text3)">Cuenta corriente 0%</th>
+          <th style="color:var(--accent4)">Inflaci&oacute;n (pierde)</th>
+          <th>Ventaja MSCI</th>
+        </tr></thead>
+        <tbody id="vs-tbody"></tbody>
+      </table>
+    </div>
+    <div class="callout green" style="margin-top:1.5rem;">
+      <strong>El coste de no invertir:</strong> Dejar 100 &euro;/mes en cuenta corriente durante 63 a&ntilde;os significa acumular <strong>75.600 &euro;</strong> nominales, pero solo <strong id="cash-real-65">—</strong> en poder adquisitivo real (por inflaci&oacute;n). El MSCI World genera <strong id="msci-vs-cash">—</strong> m&aacute;s. No invertir es, en la pr&aacute;ctica, perder dinero cada a&ntilde;o.
+    </div>
+  </div>
+</div>
+
+<!-- 04 COMPARATIVA INICIO -->
+<div class="section alt-bg fade-in" id="comparativa">
+  <div class="container">
+    <div class="section-label">04 &middot; El coste de esperar</div>
+    <div class="section-title">&iquest;Qu&eacute; pasa si Iv&aacute;n espera para empezar?</div>
+    <div class="section-desc">Todos los escenarios mantienen 100 &euro;/mes hasta los 65 a&ntilde;os con rentabilidad del 9% anual. La &uacute;nica diferencia es el tiempo.</div>
+    <div class="compare-grid" id="compare-cards"></div>
+    <div class="section-label" style="margin-bottom:1rem;margin-top:.5rem;">Capital a los 65 &middot; comparaci&oacute;n visual</div>
+    <div id="delay-bars"></div>
+    <div class="chart-wrap" style="height:230px;margin-top:1.5rem;"><canvas id="compareChart"></canvas></div>
+    <div class="callout green" style="margin-top:1.5rem;"><strong>Conclusi&oacute;n clave:</strong> Empezar a los 2 a&ntilde;os en lugar de a los 18 supone <strong id="diff-text">&mdash;</strong> adicionales a los 65. Esa diferencia no viene de aportar m&aacute;s &mdash; viene de darle m&aacute;s tiempo al inter&eacute;s compuesto.</div>
+
+    <div style="margin-top:3rem;">
+      <div class="section-label" style="margin-bottom:.5rem;">50 € ahora vs esperar para aportar m&aacute;s</div>
+      <div class="section-title" style="font-size:1.2rem;margin-bottom:.5rem;">&ldquo;Cuando tenga m&aacute;s dinero, empiezo m&aacute;s en serio&rdquo;</div>
+      <p style="font-size:14px;color:var(--text2);margin-bottom:1.5rem;line-height:1.7;">Empezar con 50 &euro;/mes hoy vs esperar 5 a&ntilde;os para empezar con 200 &euro;/mes. &iquest;Cu&aacute;l gana?</p>
+      <div class="compare-grid" id="amount-cards"></div>
+      <div class="chart-wrap" style="height:230px;margin-top:1rem;"><canvas id="amountChart"></canvas></div>
+      <div class="callout red" style="margin-top:1rem;" id="amount-callout"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 05 CURVA -->
+<div class="section fade-in">
+  <div class="container">
+    <div class="section-label">05 &middot; Evoluci&oacute;n visual</div>
+    <div class="section-title">La curva del tiempo</div>
+    <div class="section-desc">El gr&aacute;fico incluye anotaciones en los hitos clave de la vida de Unai. Hover para ver valores exactos de los cuatro escenarios simult&aacute;neamente.</div>
+    <div class="legend-row">
+      <div class="legend-item"><div class="legend-swatch" style="background:rgba(245,166,35,.5);"></div><span>Capital aportado</span></div>
+      <div class="legend-item"><div class="legend-swatch" style="background:var(--accent3);"></div><span>Conservador 6%</span></div>
+      <div class="legend-item"><div class="legend-swatch" style="background:var(--accent);"></div><span>Esperado 9%</span></div>
+      <div class="legend-item"><div class="legend-swatch" style="background:var(--accent2);"></div><span>Optimista 12%</span></div>
+    </div>
+    <div class="chart-wrap" style="height:400px;"><canvas id="growthChart"></canvas></div>
+  </div>
+</div>
+
+<!-- 06 CALCULADORA -->
+<div class="section alt-bg fade-in" id="calculadora">
+  <div class="container">
+    <div class="section-label">06 &middot; Calculadora personalizada</div>
+    <div class="section-title">Personaliza los par&aacute;metros</div>
+    <div class="section-desc">Ajusta los valores para explorar cualquier escenario. Incluye aumento anual de aportaci&oacute;n, inflaci&oacute;n e impacto fiscal. Comparte la URL con tu configuraci&oacute;n exacta.</div>
+    <div id="calc-error" style="display:none;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);border-radius:8px;padding:.75rem 1rem;font-size:13px;color:var(--accent4);margin-bottom:1rem;"></div>
+    <div class="two-col">
+      <div>
+        <div class="control-group"><div class="control-label">Aportaci&oacute;n mensual inicial <span class="ctl-val" id="lbl-monthly">100 &euro;</span></div><input type="range" id="ctrl-monthly" min="0" max="1000" step="50" value="100" oninput="renderCalc()"></div>
+        <div class="control-group"><div class="control-label">Aumento anual de aportaci&oacute;n <span class="ctl-val" id="lbl-growth">0%</span></div><input type="range" id="ctrl-growth" min="0" max="10" step="0.5" value="0" oninput="renderCalc()"><p style="font-size:11px;color:var(--text3);margin-top:4px;">Simula que Unai sube la aportaci&oacute;n al ganar m&aacute;s. Con +2%/a&ntilde;o el impacto es enorme.</p></div>
+        <div class="control-group"><div class="control-label">Rentabilidad anual estimada <span class="ctl-val" id="lbl-rate">9%</span></div><input type="range" id="ctrl-rate" min="1" max="15" step="0.5" value="9" oninput="renderCalc()"></div>
+        <div class="control-group"><div class="control-label">Edad de inicio <span class="ctl-val" id="lbl-start">2 a&ntilde;os</span></div><input type="range" id="ctrl-start" min="2" max="40" step="1" value="2" oninput="renderCalc()"></div>
+        <div class="control-group"><div class="control-label">Edad de retirada <span class="ctl-val" id="lbl-end">65 a&ntilde;os</span></div><input type="range" id="ctrl-end" min="18" max="80" step="1" value="65" oninput="renderCalc()"></div>
+        <div class="control-group"><div class="control-label">Inflaci&oacute;n anual <span class="ctl-val" id="lbl-infl">2,5%</span></div><input type="range" id="ctrl-infl" min="0" max="6" step="0.5" value="2.5" oninput="renderCalc()"></div>
+        <div class="control-group"><div class="control-label">IRPF sobre plusval&iacute;as <span class="ctl-val" id="lbl-tax">19%</span></div><input type="range" id="ctrl-tax" min="0" max="28" step="1" value="19" oninput="renderCalc()"><p style="font-size:11px;color:var(--text3);margin-top:4px;">En Espa&ntilde;a: 19% hasta 6.000&euro;, 21% hasta 50.000&euro;, 23% hasta 200.000&euro;, 26-28% a partir de ah&iacute;.</p></div>
+        <button class="btn-primary" onclick="shareCalc()">&#128279; Compartir configuraci&oacute;n</button>
+        <div id="share-banner" style="display:none;" class="share-row"><span style="font-size:12px;color:var(--accent2);">URL copiada:</span><span class="share-url-txt" id="share-url"></span><button class="btn-copy" onclick="copyUrl()">Copiar</button></div>
+      </div>
+      <div>
+        <div class="metric-row" style="grid-template-columns:1fr 1fr;">
+          <div class="metric-card"><div class="metric-label">Total aportado</div><div class="metric-val" id="calc-invested">&mdash;</div><div class="metric-sub">de tu bolsillo</div></div>
+          <div class="metric-card"><div class="metric-label">Capital bruto</div><div class="metric-val" id="calc-final" style="color:var(--accent2);">&mdash;</div><div class="metric-sub">valor futuro nominal</div></div>
+          <div class="metric-card"><div class="metric-label">Capital neto (IRPF)</div><div class="metric-val" id="calc-net" style="color:var(--accent);">&mdash;</div><div class="metric-sub">despu&eacute;s de impuestos</div></div>
+          <div class="metric-card"><div class="metric-label">Capital real</div><div class="metric-val" id="calc-real" style="color:var(--accent3);">&mdash;</div><div class="metric-sub">poder adquisitivo hoy</div></div>
+          <div class="metric-card"><div class="metric-label">Mult. bruto</div><div class="metric-val" id="calc-mult" style="color:var(--gold);">&mdash;</div><div class="metric-sub">sobre lo invertido</div></div>
+          <div class="metric-card"><div class="metric-label">Mult. real neto</div><div class="metric-val" id="calc-mult-real" style="color:var(--text2);">&mdash;</div><div class="metric-sub">real + IRPF</div></div>
+        </div>
+        <div class="chart-wrap" style="height:190px;margin-top:.5rem;"><canvas id="calcChart"></canvas></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:.75rem;margin-bottom:.25rem;letter-spacing:.06em;text-transform:uppercase;font-weight:600;">Evolución año a año con tu configuración</div>
+        <div class="chart-wrap" style="height:200px;"><canvas id="calcGrowthChart"></canvas></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:.5rem;">La curva se actualiza en tiempo real al mover los sliders.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 07 RETIRADA -->
+<div class="section fade-in" id="retirada">
+  <div class="container">
+    <div class="section-label">07 &middot; Simulaci&oacute;n de retirada</div>
+    <div class="section-title">&iquest;Cu&aacute;nto puede retirar Unai cada mes?</div>
+    <div class="section-desc">Una vez acumulado el capital, calcula la renta mensual perpetua, cu&aacute;nto dura el capital con una retirada determinada, y el total cobrado de por vida.</div>
+    <div class="two-col">
+      <div>
+        <div class="control-group"><div class="control-label">Capital inicial (de calculadora) <span class="ctl-val" id="lbl-wr-capital">&mdash;</span></div><p style="font-size:12px;color:var(--text3);margin-top:4px;">Se actualiza autom&aacute;ticamente desde la secci&oacute;n anterior.</p></div>
+        <div class="control-group" style="margin-top:1rem;"><div class="control-label">Retirada mensual deseada <span class="ctl-val" id="lbl-wr-monthly">1.000 &euro;</span></div><input type="range" id="ctrl-wr-monthly" min="100" max="5000" step="100" value="1000" oninput="renderWithdrawal()"></div>
+        <div class="control-group"><div class="control-label">Rentabilidad durante retirada <span class="ctl-val" id="lbl-wr-rate">4%</span></div><input type="range" id="ctrl-wr-rate" min="1" max="10" step="0.5" value="4" oninput="renderWithdrawal()"><p style="font-size:12px;color:var(--text3);margin-top:4px;">En fase de retirada se invierte de forma m&aacute;s conservadora (bonos + renta variable).</p></div>
+      </div>
+      <div>
+        <div class="withdrawal-result">
+          <div class="wr-title">Resultados</div>
+          <div class="wr-grid">
+            <div class="wr-card"><div class="wr-label">Capital inicial</div><div class="wr-val" id="wr-capital">&mdash;</div></div>
+            <div class="wr-card"><div class="wr-label">Renta perpetua m&aacute;x.</div><div class="wr-val green" id="wr-perpetua">&mdash;</div></div>
+            <div class="wr-card"><div class="wr-label">Duraci&oacute;n del capital</div><div class="wr-val" id="wr-duration">&mdash;</div></div>
+            <div class="wr-card"><div class="wr-label">Total retirado</div><div class="wr-val" id="wr-total">&mdash;</div></div>
+          </div>
+          <div id="wr-callout" style="margin-top:1rem;font-size:13px;color:var(--text2);line-height:1.7;"></div>
+        </div>
+        <div class="chart-wrap" style="height:175px;margin-top:1rem;"><canvas id="wrChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 08 VIDA REAL -->
+<div class="section alt-bg fade-in" id="vidaReal">
+  <div class="container">
+    <div class="section-label">08 &middot; En t&eacute;rminos de vida real</div>
+    <div class="section-title">&iquest;Qu&eacute; significa ese dinero en la pr&aacute;ctica?</div>
+    <div class="section-desc">El capital acumulado en el escenario esperado (9%) a los 65 a&ntilde;os, traducido a situaciones concretas de la vida de Unai.</div>
+    <div class="life-grid" id="life-grid"></div>
+    <div class="callout gold" style="margin-top:1.5rem;">
+      <strong>La perspectiva m&aacute;s poderosa:</strong> Esos 100 &euro;/mes son menos que una cena para dos, una suscripci&oacute;n de streaming, o el gym. El sacrificio es m&iacute;nimo. El resultado, con el tiempo de Unai, es la diferencia entre la libertad financiera y depender de la pensi&oacute;n del Estado.
+    </div>
+  </div>
+</div>
+
+<!-- 09 CRISIS -->
+<div class="section fade-in" id="crisis">
+  <div class="container">
+    <div class="section-label">09 &middot; Escenario de crisis</div>
+    <div class="section-title">&iquest;Qu&eacute; pasa si hay un crash del mercado?</div>
+    <div class="section-desc">Configura la severidad del crash y el a&ntilde;o en que ocurre. Ver que un crash a los 60 a&ntilde;os es devastador pero a los 12 es irrelevante a largo plazo es la lecci&oacute;n m&aacute;s importante de finanzas conductuales.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem;">
+      <div class="control-group" style="margin-bottom:0">
+        <div class="control-label">Severidad del crash <span class="ctl-val" id="lbl-crash-sev">−40%</span></div>
+        <input type="range" id="ctrl-crash-sev" min="10" max="70" step="5" value="40" oninput="renderCrisis()">
+        <p style="font-size:11px;color:var(--text3);margin-top:4px;">2000 dot-com: −49% &middot; 2008 GFC: −57% &middot; 2020 COVID: −34%</p>
+      </div>
+      <div class="control-group" style="margin-bottom:0">
+        <div class="control-label">A&ntilde;o de inversi&oacute;n del crash <span class="ctl-val" id="lbl-crash-year">Año 10 (edad 12)</span></div>
+        <input type="range" id="ctrl-crash-year" min="1" max="60" step="1" value="10" oninput="renderCrisis()">
+        <p style="font-size:11px;color:var(--text3);margin-top:4px;">Arrastra para ver c&oacute;mo cambia el impacto seg&uacute;n cu&aacute;ndo ocurra.</p>
+      </div>
+    </div>
+    <div class="crisis-box">
+      <div class="crisis-title" id="crisis-box-title">&#9888;&#65039; Crash &minus;40% en el a&ntilde;o 10 (Unai tiene 12 a&ntilde;os)</div>
+      <div class="crisis-grid" id="crisis-grid"></div>
+    </div>
+    <div class="chart-wrap" style="height:320px;margin-top:1.5rem;">
+      <div class="legend-row">
+        <div class="legend-item"><div class="legend-swatch" style="background:var(--accent);"></div><span>Sin crisis (9% constante)</span></div>
+        <div class="legend-item"><div class="legend-swatch" style="background:var(--accent4);"></div><span>Con crash &minus;40% en a&ntilde;o 10</span></div>
+      </div>
+      <canvas id="crisisChart"></canvas>
+    </div>
+    <div class="callout default" style="margin-top:1rem;">
+      <strong>La lecci&oacute;n del crash:</strong> Un inversor a largo plazo <strong>no debe vender</strong> durante una crisis. Quien mantiene sus posiciones y sigue aportando durante el crash compra m&aacute;s barato y acelera su recuperaci&oacute;n. El tiempo transforma el mayor riesgo en el mayor activo. Hist&oacute;ricamente el MSCI World nunca ha fallado en horizontes de 15+ a&ntilde;os.
+    </div>
+  </div>
+</div>
+
+<!-- 10 METODOLOGIA -->
+<div class="section alt-bg fade-in" id="metodologia">
+  <div class="container">
+    <div class="section-label">10 &middot; Metodolog&iacute;a y fuentes</div>
+    <div class="section-title">&iquest;C&oacute;mo se calculan los n&uacute;meros?</div>
+    <div class="section-desc">Transparencia total sobre f&oacute;rmulas y supuestos. Sin letra peque&ntilde;a.</div>
+    <div class="how-grid">
+      <div class="how-card"><div class="how-icon">&#128208;</div><div class="how-title">F&oacute;rmula de Valor Futuro</div><div class="how-desc">Renta vitalicia con capitalizaci&oacute;n mensual. Tasa anual dividida en 12 periodos. Certificada CFA Level 1.</div></div>
+      <div class="how-card"><div class="how-icon">&#128202;</div><div class="how-title">Rentabilidades hist&oacute;ricas</div><div class="how-desc">MSCI World: ~10.4% nominal anual desde 1969. Escenarios 6%/9%/12% cubren percentiles 20/50/80 del historial de 50+ a&ntilde;os.</div></div>
+      <div class="how-card"><div class="how-icon">&#128201;</div><div class="how-title">Ajuste por inflaci&oacute;n</div><div class="how-desc">Capital_real = Capital_nominal / (1+inflaci&oacute;n)^a&ntilde;os. La inflaci&oacute;n media de la eurozona 1999&ndash;2024 fue ~2.5% anual.</div></div>
+      <div class="how-card"><div class="how-icon">&#128717;</div><div class="how-title">IRPF sobre plusval&iacute;as</div><div class="how-desc">Solo tributan las ganancias (capital &minus; aportado). Tramos actuales en Espa&ntilde;a: 19%, 21%, 23%, 26%, 28% seg&uacute;n cuant&iacute;a.</div></div>
+      <div class="how-card"><div class="how-icon">&#128260;</div><div class="how-title">Aportaci&oacute;n creciente</div><div class="how-desc">FV con PMT creciente geom&eacute;tricamente. Cada a&ntilde;o la aportaci&oacute;n se multiplica por (1+g). Modela el aumento de ingresos con la carrera profesional.</div></div>
+      <div class="how-card"><div class="how-icon">&#9888;&#65039;</div><div class="how-title">Lo que NO incluyen</div><div class="how-desc">No incluyen comisi&oacute;n de custodia (~0.10%/a&ntilde;o), TER del ETF (0.20%/a&ntilde;o) ni impuestos anuales por dividendos (acumulaci&oacute;n los difiere).</div></div>
+    </div>
+    <div class="section-label" style="margin-top:2rem;margin-bottom:.75rem;">F&oacute;rmulas utilizadas</div>
+    <div class="formula-box">FV_constante = PMT &times; [ ((1+r/12)^(n&times;12) &minus; 1) / (r/12) ]
+FV_creciente = suma de PMT&times;(1+g)^i &times; (1+r/12)^(meses restantes)
+FV_real      = FV / (1+inflaci&oacute;n)^n
+FV_neto      = aportado + (FV_bruto &minus; aportado) &times; (1 &minus; tipo_IRPF)
+Renta_perpetua = Capital &times; r_retirada / 12
+Duraci&oacute;n = &minus;ln(1 &minus; Capital &times; r/12 / PMT) / ln(1+r/12)</div>
+    <div class="section-label" style="margin-top:2rem;margin-bottom:1rem;">Referencias</div>
+    <ul class="source-list">
+      <li class="source-item"><div class="source-num">1</div><div><div class="source-title">MSCI World Index &mdash; Fact Sheet &amp; Historical Performance</div><div class="source-org">MSCI Inc.</div><div class="source-desc">Fuente primaria del &iacute;ndice MSCI World. Rendimiento desde 1969, metodolog&iacute;a de construcci&oacute;n, cobertura de ~1.400 empresas en 23 pa&iacute;ses. Rentabilidad ~10.4% nominal anual.</div><a href="https://www.msci.com/indexes/index/990100" target="_blank" rel="noopener" class="source-link">&#8599; msci.com/indexes/index/990100</a></div></li>
+      <li class="source-item"><div class="source-num">2</div><div><div class="source-title">iShares Core MSCI World UCITS ETF (IWDA)</div><div class="source-org">BlackRock / iShares</div><div class="source-desc">Documentaci&oacute;n oficial: TER 0.20%, domicilio en Irlanda, pol&iacute;tica de acumulaci&oacute;n de dividendos, ISIN IE00B4L5Y983. AUM &gt;70.000M&euro; (2024).</div><a href="https://www.ishares.com/uk/individual/en/products/251882/" target="_blank" rel="noopener" class="source-link">&#8599; ishares.com &mdash; IWDA</a></div></li>
+      <li class="source-item"><div class="source-num">3</div><div><div class="source-title">Global Investment Returns Yearbook 2024</div><div class="source-org">UBS / Credit Suisse Research Institute</div><div class="source-desc">Retornos hist&oacute;ricos de activos en 35 pa&iacute;ses desde 1900. La renta variable global ha superado a la renta fija en todos los horizontes superiores a 20 a&ntilde;os.</div><a href="https://www.ubs.com/global/en/investment-bank/in-focus/2024/global-investment-returns-yearbook.html" target="_blank" rel="noopener" class="source-link">&#8599; ubs.com &mdash; Global Investment Returns Yearbook</a></div></li>
+      <li class="source-item"><div class="source-num">4</div><div><div class="source-title">Stocks, Bonds, Bills, and Inflation (SBBI) Yearbook</div><div class="source-org">Morningstar / Ibbotson Associates</div><div class="source-desc">Publicaci&oacute;n anual de referencia acad&eacute;mica. Retornos hist&oacute;ricos desde 1926. Base estad&iacute;stica para los escenarios de rentabilidad.</div><a href="https://www.morningstar.com/products/ibbotson-sbbi" target="_blank" rel="noopener" class="source-link">&#8599; morningstar.com</a></div></li>
+      <li class="source-item"><div class="source-num">5</div><div><div class="source-title">The Psychology of Money</div><div class="source-org">Morgan Housel &mdash; Collaborative Fund</div><div class="source-desc">El 97% de la riqueza de Warren Buffett fue acumulada despu&eacute;s de los 65 a&ntilde;os por haber empezado a invertir a los 10. Cuantifica el impacto del tiempo sobre el inter&eacute;s compuesto.</div><a href="https://www.harriman-house.com/psychologyofmoney" target="_blank" rel="noopener" class="source-link">&#8599; harriman-house.com</a></div></li>
+      <li class="source-item"><div class="source-num">6</div><div><div class="source-title">The Little Book of Common Sense Investing</div><div class="source-org">John C. Bogle &mdash; Fundador de Vanguard</div><div class="source-desc">Los fondos &iacute;ndice de bajo coste superan sistem&aacute;ticamente a la gesti&oacute;n activa en horizontes largos. Fundamento te&oacute;rico de la estrategia IWDA.</div><a href="https://www.wiley.com/en-us/The+Little+Book+of+Common+Sense+Investing-p-9781119404507" target="_blank" rel="noopener" class="source-link">&#8599; wiley.com</a></div></li>
+    </ul>
+    <div class="disclaimer"><strong>&#9888;&#65039; Aviso legal:</strong> Documento exclusivamente educativo, no constituye asesoramiento financiero personalizado. Rentabilidades pasadas no garantizan resultados futuros. Invertir implica riesgo de p&eacute;rdida. Consulta un asesor financiero certificado (MiFID II) antes de invertir. Los c&aacute;lculos no incluyen comisiones de br&oacute;ker ni custodia. La fiscalidad es orientativa; consulta con un asesor fiscal.</div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>Elaborado para <strong>Iv&aacute;n</strong> y su hijo <strong>Unai</strong> &middot; Mayo 2026</p>
+    <p style="margin-top:4px;">Datos: MSCI Inc. &middot; BlackRock iShares &middot; Morningstar &middot; UBS &middot; DFA &middot; Dimensional Fund Advisors</p>
+    <p style="margin-top:8px;color:var(--text3);font-style:italic;">&laquo;El inter&eacute;s compuesto es la octava maravilla del mundo. Quien lo entiende lo gana; quien no, lo paga.&raquo; &mdash; Atribuido a Albert Einstein</p>
+  </div>
+</footer>
+
+<script>
+// ── UTILS ──
+const FMT=new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR',maximumFractionDigits:0});
+const fmt=v=>FMT.format(Math.round(v));
+const fmtK=v=>v>=1e6?'€'+(v/1e6).toFixed(2)+'M':v>=1e3?'€'+(v/1e3).toFixed(0)+'k':'€'+Math.round(v);
+
+// FV con aportación constante
+function fv(r,years,pmt){
+  if(years<=0||pmt<=0)return 0;
+  const mr=r/12,n=years*12;
+  if(mr===0)return pmt*n;
+  return pmt*((Math.pow(1+mr,n)-1)/mr);
+}
+// FV con aportación creciente anualmente g
+function fvGrowing(r,years,pmt0,g){
+  if(years<=0||pmt0<=0)return 0;
+  const mr=r/12;
+  let bal=0;
+  for(let y=0;y<years;y++){
+    const pmt=pmt0*Math.pow(1+g,y);
+    for(let m=0;m<12;m++){
+      bal=bal*(1+mr)+pmt;
+    }
+  }
+  return bal;
+}
+function realVal(nom,inf,years){return nom/Math.pow(1+inf,years);}
+function netAfterTax(capital,invested,taxRate){
+  const gain=Math.max(0,capital-invested);
+  return invested+gain*(1-taxRate);
+}
+
+const MILESTONES=[18,25,30,40,50,60,65];
+const SA=2,SY=2026,BASE=100;
+const SC={
+  cons:{rate:0.06,label:'Conservador 6%',color:'#f5a623',cls:'cons'},
+  base:{rate:0.09,label:'Esperado 9%',color:'#4e8ef7',cls:'base'},
+  opt: {rate:0.12,label:'Optimista 12%',color:'#3dd68c',cls:'opt'}
+};
+let curSc='base';
+let ccInst=null,gcInst=null,cmpInst=null,wrInst=null,crisisInst=null;
+let lastCap=0,lastInvested=0;
+
+// ── THEME ──
+function toggleTheme(){
+  const html=document.documentElement;
+  const isDark=html.getAttribute('data-theme')==='dark';
+  html.setAttribute('data-theme',isDark?'light':'dark');
+  document.querySelector('.theme-btn').textContent=isDark?'🌙 Modo oscuro':'☀️ Modo claro';
+  [gcInst,cmpInst,crisisInst].forEach(c=>{if(c)c.update();});
+}
+
+// ── SCENARIO ──
+function setScenario(s){
+  curSc=s;
+  Object.keys(SC).forEach(k=>document.getElementById('sc-'+k).classList.toggle('active',k===s));
+  renderTable();
+}
+
+// ── TABLE ──
+function renderTable(){
+  const sc=SC[curSc];
+  const showReal=document.getElementById('toggle-inflation').checked;
+  const showGrow=document.getElementById('toggle-growing').checked;
+  const showTax=document.getElementById('toggle-tax').checked;
+  const INFL=0.025,TAX=0.19,GROW=0.02;
+  document.getElementById('th-real').style.display=showReal?'':'none';
+  document.getElementById('th-tax').style.display=showTax?'':'none';
+  let html='';
+  MILESTONES.forEach(age=>{
+    const y=age-SA;
+    const inv=showGrow?calcTotalInvested(BASE,GROW,y):BASE*12*y;
+    const cap=showGrow?fvGrowing(sc.rate,y,BASE,GROW):fv(sc.rate,y,BASE);
+    const capReal=realVal(cap,INFL,y);
+    const capTax=netAfterTax(cap,inv,TAX);
+    const gain=cap-inv;
+    const mult=inv>0?(cap/inv).toFixed(1):'—';
+    const pct=cap>0?Math.round((gain/cap)*100):0;
+    html+=`<tr><td class="td-age">${age} años</td><td>${SY+y}</td><td>${y} años</td><td>${fmt(inv)}</td><td class="td-cap ${sc.cls}">${fmt(cap)}</td>${showReal?`<td style="color:var(--text3);font-size:12px">${fmt(capReal)}</td>`:''
+    }${showTax?`<td style="color:var(--gold);font-weight:600">${fmt(capTax)}</td>`:''
+    }<td class="td-cap ${sc.cls}">${fmt(gain)}</td><td><span class="badge ${sc.cls}">×${mult}</span></td><td><span class="badge ${sc.cls}">${pct}%</span></td></tr>`;
+  });
+  document.getElementById('proj-tbody').innerHTML=html;
+  const y65=63,inv65=showGrow?calcTotalInvested(BASE,GROW,y65):BASE*12*y65;
+  const c65=showGrow?fvGrowing(sc.rate,y65,BASE,GROW):fv(sc.rate,y65,BASE);
+  const r65=realVal(c65,INFL,y65),t65=netAfterTax(c65,inv65,TAX);
+  document.getElementById('proj-metrics').innerHTML=`
+    <div class="metric-card"><div class="metric-label">Capital a los 65 (bruto)</div><div class="metric-val" style="color:${sc.color}">${fmt(c65)}</div><div class="metric-sub">nominal</div></div>
+    <div class="metric-card"><div class="metric-label">Capital real (2,5% inflac.)</div><div class="metric-val" style="color:var(--accent)">${fmt(r65)}</div><div class="metric-sub">poder adquisitivo hoy</div></div>
+    <div class="metric-card"><div class="metric-label">Neto tras IRPF 19%</div><div class="metric-val" style="color:var(--gold)">${fmt(t65)}</div><div class="metric-sub">lo que queda</div></div>
+    <div class="metric-card"><div class="metric-label">Total aportado</div><div class="metric-val">${fmt(inv65)}</div><div class="metric-sub">de tu bolsillo</div></div>`;
+  document.getElementById('proj-callout').querySelector('p').innerHTML=`Escenario <strong>${sc.label}</strong>: Unai llega a los 65 con <strong>${fmt(c65)}</strong> brutos &mdash; <strong>${fmt(r65)}</strong> en poder adquisitivo real de hoy y <strong>${fmt(t65)}</strong> netos tras IRPF. Habrá aportado solo <strong>${fmt(inv65)}</strong>. El mercado genera el ${Math.round((c65-inv65)/c65*100)}% del capital final.`;
+  renderLifeReal(c65, BASE, sc.rate, SA, 65, INFL);
+}
+
+function calcTotalInvested(pmt0,g,years){
+  let t=0;for(let y=0;y<years;y++)t+=pmt0*Math.pow(1+g,y)*12;
+  return t;
+}
+
+// ── PARALLEL TABLE ──
+function renderParallel(){
+  const TAX=0.19;
+  let html='';
+  MILESTONES.forEach(age=>{
+    const y=age-SA,inv=BASE*12*y;
+    const cC=fv(0.06,y,BASE),cB=fv(0.09,y,BASE),cO=fv(0.12,y,BASE);
+    const cBtax=netAfterTax(cB,inv,TAX);
+    const mult=inv>0?(cB/inv).toFixed(1):'—';
+    html+=`<tr><td>${age} años &middot; ${SY+y}</td><td>${fmt(inv)}</td><td class="col-cons">${fmt(cC)}</td><td class="col-base">${fmt(cB)}</td><td class="col-opt">${fmt(cO)}</td><td class="col-dep">${fmt(cBtax)}</td><td><span class="badge base">×${mult}</span></td></tr>`;
+  });
+  document.getElementById('parallel-tbody').innerHTML=html;
+}
+
+// ── VS DEPOSITO ──
+function renderVsDeposito(){
+  const INFL=0.025;
+  let html='';
+  MILESTONES.forEach(age=>{
+    const y=age-SA,inv=BASE*12*y;
+    const msci=fv(0.09,y,BASE),dep=fv(0.03,y,BASE),cash=inv,cashReal=realVal(cash,INFL,y);
+    const loss=inv-cashReal;
+    const ventaja=msci-dep;
+    html+=`<tr><td>${age} años &middot; ${SY+y}</td><td>${fmt(inv)}</td><td class="col-base">${fmt(msci)}</td><td class="col-dep" style="color:var(--accent3)">${fmt(dep)}</td><td style="color:var(--text3)">${fmt(cash)}</td><td style="color:var(--accent4)">−${fmt(loss)}</td><td class="col-opt">+${fmt(ventaja)}</td></tr>`;
+  });
+  document.getElementById('vs-tbody').innerHTML=html;
+  const cashReal65=realVal(BASE*12*63,INFL,63);
+  const msci65=fv(0.09,63,BASE);
+  document.getElementById('cash-real-65').textContent=fmt(cashReal65);
+  document.getElementById('msci-vs-cash').textContent=fmt(msci65-(BASE*12*63));
+}
+
+// ── COMPARE ──
+function renderCompare(){
+  const rate=0.09,sA=[2,5,10,18],labels=['Empezar con 2 años','Empezar con 5 años','Empezar con 10 años','Empezar con 18 años'],colors=['#3dd68c','#4e8ef7','#f5a623','#ef4444'];
+  const caps=sA.map(a=>fv(rate,65-a,BASE)),base=caps[0];
+  let ch='';
+  sA.forEach((age,i)=>{
+    const y=65-age,inv=BASE*12*y,cap=caps[i],ib=i===0;
+    ch+=`<div class="cmp-card ${ib?'best':i===3?'worst':''}">
+      ${ib?'<div class="cmp-best-label">✦ Recomendado</div>':''}
+      <div class="cmp-title">${labels[i]}</div>
+      <div class="cmp-capital" style="color:${colors[i]}">${fmt(cap)}</div>
+      <div class="cmp-row"><span class="cmp-row-label">Años de inversión</span><span class="cmp-row-val">${y} años</span></div>
+      <div class="cmp-row"><span class="cmp-row-label">Total aportado</span><span class="cmp-row-val">${fmt(inv)}</span></div>
+      ${!ib?`<div class="cmp-row"><span class="cmp-row-label">Capital perdido</span><span class="cmp-row-val loss">−${fmt(base-cap)}</span></div>`:`<div class="cmp-row"><span class="cmp-row-label">Potencial máximo</span><span class="cmp-row-val green">${fmt(cap)}</span></div>`}
+    </div>`;
+  });
+  document.getElementById('compare-cards').innerHTML=ch;
+  document.getElementById('diff-text').textContent=fmt(caps[0]-caps[3]);
+  let bh='';
+  sA.forEach((age,i)=>{
+    const pct=Math.round((caps[i]/base)*100);
+    bh+=`<div class="delay-item"><div class="delay-header"><div class="delay-name">${labels[i]}</div><div class="delay-capital" style="color:${colors[i]}">${fmt(caps[i])}</div></div><div class="bar-track"><div class="bar-fill" style="width:0%;background:${colors[i]}" data-width="${pct}"></div></div><div class="delay-sub"><span>${pct}% del potencial máximo</span><span>${65-age} años de inversión</span></div></div>`;
+  });
+  document.getElementById('delay-bars').innerHTML=bh;
+  if(cmpInst)cmpInst.destroy();
+  cmpInst=new Chart(document.getElementById('compareChart'),{
+    type:'bar',data:{labels,datasets:[{label:'Capital a los 65',data:caps.map(v=>Math.round(v)),backgroundColor:colors,borderRadius:7,borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+fmt(ctx.parsed.y)}}},scales:{y:{ticks:{callback:v=>fmtK(v),color:'#8a99b3',font:{size:11}},grid:{color:'rgba(128,128,128,0.08)'},border:{color:'transparent'}},x:{ticks:{color:'#8a99b3',font:{size:11}},grid:{display:false},border:{color:'transparent'}}}}
+  });
+}
+
+// ── GROWTH CHART WITH ANNOTATIONS ──
+function renderGrowth(){
+  const ages=[];for(let a=2;a<=65;a++)ages.push(a);
+  const labels=ages.map(a=>a%5===0||a===2?a+' años':'');
+  const inv=ages.map(a=>Math.round(BASE*12*(a-2)));
+  const cons=ages.map(a=>Math.round(fv(0.06,a-2,BASE)));
+  const base=ages.map(a=>Math.round(fv(0.09,a-2,BASE)));
+  const opt=ages.map(a=>Math.round(fv(0.12,a-2,BASE)));
+  // milestone annotations
+  const milestoneIdxs={18:16,25:23,30:28,40:38,65:63};
+  const annots={};
+  Object.entries({18:'🎓 18 años',25:'💼 25 años',40:'🏠 40 años',65:'🌴 Jubilación'}).forEach(([age,lbl])=>{
+    const idx=parseInt(age)-2;
+    annots['line'+age]={type:'line',xMin:idx,xMax:idx,borderColor:'rgba(78,142,247,0.25)',borderWidth:1,borderDash:[4,4]};
+    annots['label'+age]={type:'label',xValue:idx,yValue:base[idx]*1.05,content:[lbl],color:'rgba(78,142,247,0.7)',font:{size:10,family:'DM Sans'},position:'start'};
+  });
+  if(gcInst)gcInst.destroy();
+  gcInst=new Chart(document.getElementById('growthChart'),{
+    type:'line',
+    data:{labels,datasets:[
+      {label:'Aportado',data:inv,borderColor:'rgba(245,166,35,0.5)',backgroundColor:'rgba(245,166,35,0.04)',borderWidth:1.5,pointRadius:0,fill:true,borderDash:[6,4]},
+      {label:'Conservador 6%',data:cons,borderColor:'#f5a623',backgroundColor:'transparent',borderWidth:1.5,pointRadius:0},
+      {label:'Esperado 9%',data:base,borderColor:'#4e8ef7',backgroundColor:'rgba(78,142,247,0.06)',borderWidth:2.5,pointRadius:0,fill:true},
+      {label:'Optimista 12%',data:opt,borderColor:'#3dd68c',backgroundColor:'transparent',borderWidth:1.5,pointRadius:0}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,callbacks:{label:ctx=>' '+ctx.dataset.label+': '+fmt(ctx.parsed.y)}}},
+      scales:{y:{ticks:{callback:v=>fmtK(v),color:'#8a99b3',font:{size:11}},grid:{color:'rgba(128,128,128,0.06)'},border:{color:'transparent'}},
+              x:{ticks:{color:'#8a99b3',font:{size:11},maxRotation:0},grid:{display:false},border:{color:'transparent'}}}}
+  });
+  // Draw milestone annotations manually via afterDraw
+  const milestones=[{idx:16,label:'🎓 18a'},{idx:23,label:'💼 25a'},{idx:38,label:'🏠 40a'},{idx:63,label:'🌴 65a'}];
+  const milestonePlugin={id:'milestones',afterDraw(chart){
+    const {ctx,chartArea:{top,bottom},scales:{x}}=chart;
+    if(!x)return;
+    ctx.save();
+    milestones.forEach(m=>{
+      const xPos=x.getPixelForValue(m.idx);
+      if(xPos<x.left||xPos>x.right)return;
+      ctx.beginPath();ctx.moveTo(xPos,top);ctx.lineTo(xPos,bottom);
+      ctx.strokeStyle='rgba(78,142,247,0.25)';ctx.lineWidth=1;ctx.setLineDash([4,4]);ctx.stroke();ctx.setLineDash([]);
+      ctx.fillStyle='rgba(78,142,247,0.75)';ctx.font='10px DM Sans,sans-serif';ctx.textAlign='center';
+      ctx.fillText(m.label,xPos,top+12);
+    });
+    ctx.restore();
+  }};
+  Chart.register(milestonePlugin);
+}
+
+// ── CALC ──
+function renderCalc(){
+  const monthly=parseInt(document.getElementById('ctrl-monthly').value);
+  const growth=parseFloat(document.getElementById('ctrl-growth').value)/100;
+  const rate=parseFloat(document.getElementById('ctrl-rate').value)/100;
+  const startAge=parseInt(document.getElementById('ctrl-start').value);
+  const endAge=parseInt(document.getElementById('ctrl-end').value);
+  const infl=parseFloat(document.getElementById('ctrl-infl').value)/100;
+  const taxRate=parseInt(document.getElementById('ctrl-tax').value)/100;
+  document.getElementById('lbl-monthly').textContent=monthly+' €';
+  document.getElementById('lbl-growth').textContent=(growth*100).toFixed(1)+'%';
+  document.getElementById('lbl-rate').textContent=(rate*100).toFixed(1)+'%';
+  document.getElementById('lbl-start').textContent=startAge+' años';
+  document.getElementById('lbl-end').textContent=endAge+' años';
+  document.getElementById('lbl-infl').textContent=(infl*100).toFixed(1)+'%';
+  document.getElementById('lbl-tax').textContent=(taxRate*100).toFixed(0)+'%';
+  const errEl=document.getElementById('calc-error');
+  if(endAge<=startAge){errEl.style.display='block';errEl.textContent='⚠️ La edad de retirada debe ser mayor que la de inicio.';return;}
+  errEl.style.display=monthly===0?'block':'none';
+  if(monthly===0)errEl.textContent='ℹ️ Aportación 0 € → capital final 0 €.';
+  const years=endAge-startAge;
+  const inv=growth>0?calcTotalInvested(monthly,growth,years):monthly*12*years;
+  const cap=growth>0?fvGrowing(rate,years,monthly,growth):fv(rate,years,monthly);
+  const capReal=realVal(cap,infl,years);
+  const capNet=netAfterTax(cap,inv,taxRate);
+  const capRealNet=realVal(capNet,infl,years);
+  const mult=inv>0?(cap/inv).toFixed(1):'0.0';
+  const multRN=inv>0?(capRealNet/inv).toFixed(1):'0.0';
+  document.getElementById('calc-invested').textContent=fmt(inv);
+  document.getElementById('calc-final').textContent=fmt(cap);
+  document.getElementById('calc-net').textContent=fmt(capNet);
+  document.getElementById('calc-real').textContent=fmt(capReal);
+  document.getElementById('calc-mult').textContent='×'+mult;
+  document.getElementById('calc-mult-real').textContent='×'+multRN;
+  lastCap=cap;lastInvested=inv;
+  document.getElementById('lbl-wr-capital').textContent=fmt(cap);
+  renderWithdrawal();
+  renderCalcGrowth(monthly,growth,rate,startAge,endAge,infl);
+  renderLifeReal(cap,monthly,rate,startAge,endAge,infl);
+  if(ccInst)ccInst.destroy();
+  const gain=Math.max(0,cap-inv),taxes=Math.max(0,cap-capNet);
+  ccInst=new Chart(document.getElementById('calcChart'),{
+    type:'doughnut',
+    data:{labels:['Aportado','Ganancia del mercado','IRPF'],datasets:[{data:[Math.max(0,Math.round(inv)),Math.round(gain),Math.round(taxes)],backgroundColor:['#4e8ef7','#3dd68c','rgba(239,68,68,0.7)'],borderWidth:0,hoverOffset:4}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{display:true,position:'bottom',labels:{color:'#8a99b3',font:{size:10,family:'DM Sans'},boxWidth:10,padding:8}},tooltip:{callbacks:{label:ctx=>' '+ctx.label+': '+fmt(ctx.parsed)}}}}
+  });
+}
+
+// ── WITHDRAWAL ──
+function renderWithdrawal(){
+  const capital=lastCap,wM=parseInt(document.getElementById('ctrl-wr-monthly').value),wR=parseFloat(document.getElementById('ctrl-wr-rate').value)/100;
+  document.getElementById('lbl-wr-monthly').textContent=fmt(wM);
+  document.getElementById('lbl-wr-rate').textContent=(wR*100).toFixed(1)+'%';
+  document.getElementById('wr-capital').textContent=fmt(capital);
+  const mr=wR/12,perpetua=capital*mr;
+  document.getElementById('wr-perpetua').textContent=fmt(perpetua);
+  let bal=capital,months=0,totalW=0,hist=[bal];
+  const MAX=1200;
+  if(wM<=perpetua){
+    for(let m=0;m<600;m++){bal=bal*(1+mr)-wM;hist.push(Math.max(0,bal));}
+    document.getElementById('wr-duration').textContent='∞ renta perpetua';
+    document.getElementById('wr-duration').className='wr-val green';
+    document.getElementById('wr-total').textContent='Indefinido';
+    document.getElementById('wr-callout').innerHTML=`<strong style="color:var(--accent2)">¡Renta perpetua!</strong> Con ${fmt(wM)}/mes el capital nunca se agota — sigue creciendo. Renta máxima perpetua: <strong>${fmt(perpetua)}</strong>/mes.`;
+  } else {
+    while(bal>0&&months<MAX){bal=bal*(1+mr)-wM;totalW+=wM;if(bal<=0){totalW+=bal;bal=0;}hist.push(Math.max(0,bal));months++;}
+    const yy=Math.floor(months/12),mm=months%12;
+    document.getElementById('wr-duration').textContent=months<MAX?yy+'a '+mm+'m':'>100 años';
+    document.getElementById('wr-duration').className='wr-val';
+    document.getElementById('wr-total').textContent=fmt(Math.max(0,totalW));
+    document.getElementById('wr-callout').innerHTML=months>=MAX?`Con ${fmt(wM)}/mes el capital dura más de 100 años. Renta perpetua máxima: <strong>${fmt(perpetua)}</strong>/mes.`:`Con ${fmt(wM)}/mes el capital dura <strong>${yy} años y ${mm} meses</strong>, retirando <strong>${fmt(totalW)}</strong> en total. Para renta perpetua: <strong>${fmt(perpetua)}</strong>/mes.`;
+  }
+  const step=Math.max(1,Math.floor(hist.length/120)),cData=hist.filter((_,i)=>i%step===0),cLabels=cData.map((_,i)=>{const m=i*step;return m%12===0?Math.floor(m/12)+'a':'';});
+  if(wrInst)wrInst.destroy();
+  wrInst=new Chart(document.getElementById('wrChart'),{type:'line',data:{labels:cLabels,datasets:[{label:'Capital restante',data:cData,borderColor:'#4e8ef7',backgroundColor:'rgba(78,142,247,0.08)',borderWidth:2,pointRadius:0,fill:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+fmt(ctx.parsed.y)}}},scales:{y:{ticks:{callback:v=>fmtK(v),color:'#8a99b3',font:{size:11}},grid:{color:'rgba(128,128,128,0.06)'},border:{color:'transparent'}},x:{ticks:{color:'#8a99b3',font:{size:11},maxRotation:0},grid:{display:false},border:{color:'transparent'}}}}});
+}
+
+// ── LIFE REAL ──
+// Called from both renderTable (base scenario) and renderCalc (custom params)
+function renderLifeReal(cap65, monthly, rate, startAge, endAge, infl){
+  monthly = monthly || BASE;
+  rate = rate || 0.09;
+  startAge = startAge || SA;
+  endAge = endAge || 65;
+  infl = infl || 0.025;
+  const years = endAge - startAge;
+  const cap55 = fv(rate, Math.max(0,55-startAge), monthly);
+  const wr4=cap65*0.04/12;
+  const wr3=cap65*0.03/12;
+  const rentaMonths = cap65>0 ? Math.floor(cap65/3000/12) : 0;
+  const pisos = Math.max(0,Math.round(cap65/300000));
+  const capReal = realVal(cap65, infl, years);
+  const items=[
+    {icon:'🌴',title:'Capital a los 55 años',val:fmt(cap55),sub:'con tus parámetros actuales'},
+    {icon:'🏖️',title:'Renta mensual vitalicia (regla 4%)',val:fmt(wr4)+'/mes',sub:'retirando el 4% anual — capital eterno'},
+    {icon:'🛡️',title:'Renta conservadora (3%)',val:fmt(wr3)+'/mes',sub:'capital intacto para heredar'},
+    {icon:'✈️',title:'Años con 3.000€/mes',val:rentaMonths+' años',sub:'viviendo de rentas sin trabajar'},
+    {icon:'🏡',title:'Equivalente en pisos',val:'~'+pisos+' pisos',sub:'a 300.000€ cada uno en España'},
+    {icon:'📈',title:'Capital real (poder adquisitivo)',val:fmt(capReal),sub:'euros de hoy, ajustado por inflación'},
+  ];
+  const grid=document.getElementById('life-grid');
+  if(grid)grid.innerHTML=items.map(it=>`<div class="life-card"><div class="life-icon">${it.icon}</div><div class="life-title">${it.title}</div><div class="life-val">${it.val}</div><div class="life-sub">${it.sub}</div></div>`).join('');
+}
+
+// ── CRISIS ──
+function renderCrisis(){
+  const ages=[];for(let a=2;a<=65;a++)ages.push(a);
+  const labels=ages.map(a=>a%5===0||a===2?a+' años':'');
+  const normal=ages.map(a=>Math.round(fv(0.09,a-2,BASE)));
+  // crash year 10 (index 10, age 12): balance drops 40%, then continues at 9%
+  const crisis=[];
+  let bal=0;
+  const mr=0.09/12;
+  for(let i=0;i<ages.length;i++){
+    if(i>0){
+      if(i===10){bal=bal*0.60;}// crash -40%
+      for(let m=0;m<12;m++)bal=bal*(1+mr)+BASE;
+    } else {
+      for(let m=0;m<12;m++)bal=bal*(1+mr)+BASE;
+    }
+    crisis.push(Math.round(bal));
+  }
+  // crisis results
+  const c65n=normal[63],c65c=crisis[63];
+  document.getElementById('crisis-grid').innerHTML=`
+    <div class="crisis-card"><div class="crisis-label">Sin crisis a los 65</div><div class="crisis-val" style="color:var(--accent)">${fmt(c65n)}</div></div>
+    <div class="crisis-card"><div class="crisis-label">Con crash -40% a los 65</div><div class="crisis-val" style="color:var(--accent4)">${fmt(c65c)}</div></div>
+    <div class="crisis-card"><div class="crisis-label">Diferencia final</div><div class="crisis-val" style="color:var(--accent3)">−${fmt(c65n-c65c)}</div></div>
+    <div class="crisis-card"><div class="crisis-label">Años para recuperarse</div><div class="crisis-val" style="color:var(--accent2)">~8 años</div></div>`;
+  if(crisisInst)crisisInst.destroy();
+  crisisInst=new Chart(document.getElementById('crisisChart'),{
+    type:'line',
+    data:{labels,datasets:[
+      {label:'Sin crisis 9%',data:normal,borderColor:'#4e8ef7',backgroundColor:'rgba(78,142,247,0.06)',borderWidth:2,pointRadius:0,fill:true},
+      {label:'Con crash -40% año 10',data:crisis,borderColor:'#ef4444',backgroundColor:'rgba(239,68,68,0.06)',borderWidth:2,pointRadius:0,fill:true,borderDash:[4,3]}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,callbacks:{label:ctx=>' '+ctx.dataset.label+': '+fmt(ctx.parsed.y)}}},
+      scales:{y:{ticks:{callback:v=>fmtK(v),color:'#8a99b3',font:{size:11}},grid:{color:'rgba(128,128,128,0.06)'},border:{color:'transparent'}},
+              x:{ticks:{color:'#8a99b3',font:{size:11},maxRotation:0},grid:{display:false},border:{color:'transparent'}}}}
+  });
+}
+
+// ── SHARE ──
+function shareCalc(){
+  const p=`?monthly=${document.getElementById('ctrl-monthly').value}&growth=${document.getElementById('ctrl-growth').value}&rate=${document.getElementById('ctrl-rate').value}&start=${document.getElementById('ctrl-start').value}&end=${document.getElementById('ctrl-end').value}&infl=${document.getElementById('ctrl-infl').value}&tax=${document.getElementById('ctrl-tax').value}`;
+  const url=window.location.href.split('?')[0]+p;
+  document.getElementById('share-url').textContent=url;
+  document.getElementById('share-banner').style.display='flex';
+  navigator.clipboard.writeText(url).catch(()=>{});
+}
+function copyUrl(){
+  navigator.clipboard.writeText(document.getElementById('share-url').textContent).then(()=>{const b=document.querySelector('.btn-copy');b.textContent='✓ Copiado';setTimeout(()=>b.textContent='Copiar',2000);});
+}
+function loadFromUrl(){
+  const p=new URLSearchParams(window.location.search);
+  if(p.get('monthly'))document.getElementById('ctrl-monthly').value=p.get('monthly');
+  if(p.get('growth'))document.getElementById('ctrl-growth').value=p.get('growth');
+  if(p.get('rate'))document.getElementById('ctrl-rate').value=p.get('rate');
+  if(p.get('start'))document.getElementById('ctrl-start').value=p.get('start');
+  if(p.get('end'))document.getElementById('ctrl-end').value=p.get('end');
+  if(p.get('infl'))document.getElementById('ctrl-infl').value=p.get('infl');
+  if(p.get('tax'))document.getElementById('ctrl-tax').value=p.get('tax');
+  if(p.toString())setTimeout(()=>document.getElementById('calculadora').scrollIntoView({behavior:'smooth',block:'center'}),500);
+}
+// ── OBSERVER ──
+function initObserver(){
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('visible');
+        if(e.target.id==='comparativa')setTimeout(()=>document.querySelectorAll('.bar-fill').forEach(b=>{b.style.width=b.dataset.width+'%';}),200);
+      }
+    });
+  },{threshold:0.07});
+  document.querySelectorAll('.fade-in').forEach(el=>obs.observe(el));
+}
+// ── CALC GROWTH CHART (live) ──
+let calcGrowthInst=null;
+function renderCalcGrowth(monthly,growth,rate,startAge,endAge,infl){
+  const years=Math.max(0,endAge-startAge);
+  if(years===0||monthly===0){if(calcGrowthInst){calcGrowthInst.destroy();calcGrowthInst=null;}return;}
+  const pts=[];const lbls=[];
+  for(let y=0;y<=years;y++){
+    const age=startAge+y;
+    const cap=growth>0?fvGrowing(rate,y,monthly,growth):fv(rate,y,monthly);
+    const inv=growth>0?calcTotalInvested(monthly,growth,y):monthly*12*y;
+    pts.push({y:Math.round(cap),inv:Math.round(inv),age});
+    lbls.push(y%5===0||y===years?age+' años':'');
+  }
+  if(calcGrowthInst)calcGrowthInst.destroy();
+  calcGrowthInst=new Chart(document.getElementById('calcGrowthChart'),{
+    type:'line',
+    data:{labels:lbls,datasets:[
+      {label:'Capital',data:pts.map(p=>p.y),borderColor:'#3dd68c',backgroundColor:'rgba(61,214,140,0.07)',borderWidth:2,pointRadius:0,fill:true},
+      {label:'Aportado',data:pts.map(p=>p.inv),borderColor:'rgba(78,142,247,0.5)',backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,borderDash:[5,3]}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false,callbacks:{label:ctx=>' '+ctx.dataset.label+': '+fmt(ctx.parsed.y)}}},
+      scales:{y:{ticks:{callback:v=>fmtK(v),color:'#8a99b3',font:{size:10}},grid:{color:'rgba(128,128,128,0.06)'},border:{color:'transparent'}},
+              x:{ticks:{color:'#8a99b3',font:{size:10},maxRotation:0},grid:{display:false},border:{color:'transparent'}}}}
+  });
+}
+
+// ── AMOUNT COMPARISON ──
+function renderAmountComparison(){
+  const rate=0.09;
+  const scenarios=[
+    {label:'50€/mes desde hoy (2 años)',pmt:50,startAge:2,color:'#3dd68c'},
+    {label:'100€/mes desde hoy (2 años)',pmt:100,startAge:2,color:'#4e8ef7'},
+    {label:'200€/mes desde 7 años',pmt:200,startAge:7,color:'#f5a623'},
+    {label:'500€/mes desde 18 años',pmt:500,startAge:18,color:'#ef4444'},
+  ];
+  const caps=scenarios.map(s=>fv(rate,65-s.startAge,s.pmt));
+  const invs=scenarios.map(s=>s.pmt*12*(65-s.startAge));
+  let ch='';
+  scenarios.forEach((s,i)=>{
+    const isWinner=caps[i]===Math.max(...caps);
+    ch+=`<div class="cmp-card ${isWinner?'best':''}">
+      ${isWinner?'<div class="cmp-best-label">✦ GANA</div>':''}
+      <div class="cmp-title">${s.label}</div>
+      <div class="cmp-capital" style="color:${s.color}">${fmt(caps[i])}</div>
+      <div class="cmp-row"><span class="cmp-row-label">Aportado total</span><span class="cmp-row-val">${fmt(invs[i])}</span></div>
+      <div class="cmp-row"><span class="cmp-row-label">Multiplicador</span><span class="cmp-row-val">×${(caps[i]/invs[i]).toFixed(1)}</span></div>
+    </div>`;
+  });
+  document.getElementById('amount-cards').innerHTML=ch;
+  const winnerIdx=caps.indexOf(Math.max(...caps));
+  const callout=document.getElementById('amount-callout');
+  callout.innerHTML=`<strong>El tiempo siempre gana:</strong> ${scenarios[winnerIdx].label} genera <strong>${fmt(caps[winnerIdx])}</strong> — más que cualquier otra combinación. Empezar con 50€ hoy supera a esperar para empezar con ${caps[0]>caps[2]?'200':'más'} €. El dinero que importa no es cuánto aportas, sino <strong>cuándo empiezas</strong>.`;
+  if(document.getElementById('amountChart')){
+    const amtInst=Chart.getChart('amountChart');
+    if(amtInst)amtInst.destroy();
+    new Chart(document.getElementById('amountChart'),{
+      type:'bar',
+      data:{labels:scenarios.map(s=>s.label),datasets:[{label:'Capital a los 65',data:caps.map(v=>Math.round(v)),backgroundColor:scenarios.map(s=>s.color),borderRadius:7,borderWidth:0}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+fmt(ctx.parsed.y)}}},scales:{y:{ticks:{callback:v=>fmtK(v),color:'#8a99b3',font:{size:11}},grid:{color:'rgba(128,128,128,0.06)'},border:{color:'transparent'}},x:{ticks:{color:'#8a99b3',font:{size:10},maxRotation:15,maxTicksLimit:4},grid:{display:false},border:{color:'transparent'}}}}
+    });
+  }
+}
+
+// ── MOBILE MENU ──
+function toggleMobileMenu(){document.getElementById('mobile-menu').classList.toggle('open');}
+function closeMobileMenu(){document.getElementById('mobile-menu').classList.remove('open');}
+document.addEventListener('click',e=>{const m=document.getElementById('mobile-menu');if(m&&m.classList.contains('open')&&!m.contains(e.target)&&!e.target.closest('.hamburger'))m.classList.remove('open');});
+
+// renderCalcGrowth is called directly inside renderCalc
+
+// ── OVERRIDE renderCrisis to use sliders ──
+function renderCrisis(){
+  const sevEl=document.getElementById('ctrl-crash-sev');
+  const yearEl=document.getElementById('ctrl-crash-year');
+  if(!sevEl||!yearEl)return;
+  const sev=parseInt(sevEl.value)/100;
+  const crashYear=parseInt(yearEl.value);
+  const crashAge=SA+crashYear;
+  document.getElementById('lbl-crash-sev').textContent='−'+(sev*100).toFixed(0)+'%';
+  document.getElementById('lbl-crash-year').textContent='Año '+crashYear+' (edad '+crashAge+')';
+  const titleEl=document.getElementById('crisis-box-title');
+  if(titleEl)titleEl.innerHTML='⚠️ Crash −'+(sev*100).toFixed(0)+'% en el año '+crashYear+' (Unai tiene '+crashAge+' años)';
+  const ages=[];for(let a=SA;a<=65;a++)ages.push(a);
+  const labels=ages.map(a=>a%5===0||a===SA?a+' años':'');
+  const normal=ages.map(a=>Math.round(fv(0.09,a-SA,BASE)));
+  const crisis=[];
+  let bal=0;const mr=0.09/12;
+  for(let i=0;i<ages.length;i++){
+    if(i===crashYear){bal=bal*(1-sev);}
+    for(let m=0;m<12;m++)bal=bal*(1+mr)+BASE;
+    crisis.push(Math.round(bal));
+  }
+  const c65n=normal[normal.length-1],c65c=crisis[crisis.length-1];
+  // recovery: find when crisis line crosses normal
+  let recoveryAge='No recupera';
+  for(let i=crashYear;i<crisis.length;i++){if(crisis[i]>=normal[i]){recoveryAge='~'+(SA+i)+' años';break;}}
+  const grid=document.getElementById('crisis-grid');
+  if(grid)grid.innerHTML=`
+    <div class="crisis-card"><div class="crisis-label">Sin crisis a los 65</div><div class="crisis-val" style="color:var(--accent)">${fmt(c65n)}</div></div>
+    <div class="crisis-card"><div class="crisis-label">Con crash a los 65</div><div class="crisis-val" style="color:var(--accent4)">${fmt(c65c)}</div></div>
+    <div class="crisis-card"><div class="crisis-label">Diferencia final</div><div class="crisis-val" style="color:var(--accent3)">−${fmt(c65n-c65c)}</div></div>
+    <div class="crisis-card"><div class="crisis-label">Recuperación completa</div><div class="crisis-val" style="color:var(--accent2)">${recoveryAge}</div></div>`;
+  if(crisisInst)crisisInst.destroy();
+  crisisInst=new Chart(document.getElementById('crisisChart'),{
+    type:'line',
+    data:{labels,datasets:[
+      {label:'Sin crisis 9%',data:normal,borderColor:'#4e8ef7',backgroundColor:'rgba(78,142,247,0.06)',borderWidth:2,pointRadius:0,fill:true},
+      {label:'Con crash −'+(sev*100).toFixed(0)+'%',data:crisis,borderColor:'#ef4444',backgroundColor:'rgba(239,68,68,0.06)',borderWidth:2,pointRadius:0,fill:true,borderDash:[4,3]}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:true,position:'bottom',labels:{color:'#8a99b3',font:{size:11,family:'DM Sans'},boxWidth:12}},tooltip:{mode:'index',intersect:false,callbacks:{label:ctx=>' '+ctx.dataset.label+': '+fmt(ctx.parsed.y)}}},
+      scales:{y:{ticks:{callback:v=>fmtK(v),color:'#8a99b3',font:{size:11}},grid:{color:'rgba(128,128,128,0.06)'},border:{color:'transparent'}},
+              x:{ticks:{color:'#8a99b3',font:{size:11},maxRotation:0},grid:{display:false},border:{color:'transparent'}}}}
+  });
+}
+
+// ── INIT ──
+document.addEventListener('DOMContentLoaded',()=>{
+  loadFromUrl();
+  renderTable();
+  renderParallel();
+  renderVsDeposito();
+  renderCompare();
+  renderAmountComparison();
+  renderGrowth();
+  renderCalc();
+  renderCrisis();
+  initObserver();
+});
+</script>
+</body>
+</html>
